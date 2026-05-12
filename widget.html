@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Widget FocusTrack</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="app-shell widget-page">
+  <div class="widget-card widget-card--active">
+    <div class="widget-dragger">·····</div>
+
+    <div class="widget-status-line widget-drag">
+      <span id="widgetStatusDot" class="status-dot status-dot--active"></span>
+      <span id="widgetStatusText" class="widget-status-text">Em andamento</span>
+    </div>
+
+    <div class="widget-ticket-meta">
+      #<span id="widgetTicketId">3482</span>
+      <strong id="widgetTeam">Suporte Interno</strong>
+    </div>
+
+    <div class="widget-ticket-title" id="widgetTitle">
+      Ajustar automação do aceite do chamado
+    </div>
+
+    <div class="widget-timer" id="widgetTimer">01:27:43</div>
+
+    <div class="widget-notes-panel no-drag">
+      <button id="toggleNotesPanelBtn" class="widget-notes-toggle" type="button">
+        <span id="notesToggleIcon">▾</span>
+        <span>Anotações</span>
+        <span id="notesCountBadge" class="widget-notes-badge hidden">0</span>
+      </button>
+
+      <div id="notesPanelContent" class="widget-notes-content collapsed">
+
+
+        <div class="widget-comment-box">
+          <label class="widget-label" for="focusCommentInput">
+            Comentários
+          </label>
+
+          <div class="widget-comment-row">
+            <input
+              id="focusCommentInput"
+              class="widget-input"
+              type="text"
+              placeholder="Adicionar comentário..."
+              autocomplete="off"
+            />
+
+            <button id="addFocusCommentBtn" class="widget-small-btn" type="button">
+              +
+            </button>
+          </div>
+
+          <div id="focusCommentLimitInfo" class="widget-comment-limit-info hidden">
+            <span id="focusCommentCounter">0/3000 caracteres</span>
+            <span id="focusCommentLimitHint"></span>
+          </div>
+
+          <div class="comment-tags-legend" aria-label="Atalhos de tags para relatório">
+            <button type="button" class="tag-pill tag-win" data-comment-tag="#WIN" title="Inserir tag de vitória">#WIN <em>vitória</em></button>
+            <button type="button" class="tag-pill tag-risco" data-comment-tag="#RISCO" title="Inserir tag de risco">#RISCO <em>risco</em></button>
+            <button type="button" class="tag-pill tag-decisao" data-comment-tag="#DECISAO" title="Inserir tag de decisão">#DECISAO <em>decisão</em></button>
+            <button type="button" class="tag-pill tag-proximo" data-comment-tag="#PROXIMO" title="Inserir tag de próximo passo">#PROXIMO <em>próximo</em></button>
+            <button type="button" class="tag-pill tag-impacto" data-comment-tag="#IMPACTO" title="Inserir tag de impacto">#IMPACTO <em>impacto</em></button>
+            <button type="button" class="tag-pill tag-doc" data-comment-tag="#DOC" title="Inserir tag de documentação">#DOC <em>doc</em></button>
+            <button type="button" class="tag-pill tag-ia" data-comment-tag="#IA" title="Inserir tag de IA">#IA <em>IA</em></button>
+          </div>
+
+
+          <div id="focusCommentsList" class="widget-comments-list"></div>
+        </div>
+      </div>
+
+      <div id="widgetInlineStatus" class="widget-inline-status hidden"></div>
+    </div>
+
+    <div class="widget-actions no-drag">
+      <button id="togglePauseBtn" class="widget-btn widget-btn--neutral" type="button">
+        Pausar
+      </button>
+
+      <button id="finishBtn" class="widget-btn widget-btn--success" type="button">
+        Concluir
+      </button>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="services/mock-db.js"></script>
+  <script src="services/flows.js"></script>
+  <script src="services/tickets.js"></script>
+  <script src="ui-feedback.js"></script>
+  <script src="widget.js"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+# Dependências
+node_modules/
+
+# Variáveis de ambiente reais
+.env
+.env.local
+.env.*.local
+
+# Electron build
+dist/
+out/
+
+# Reports gerados (manter apenas .gitkeep)
+reports/email-html/*.html
+
+# Logs
+*.log
+server-output.log
+
+# Testes gerados
+test-email.html

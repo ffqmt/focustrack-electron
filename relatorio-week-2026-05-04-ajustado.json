@@ -1,0 +1,913 @@
+﻿{
+    "meta":  {
+                 "semana":  {
+                                "inicio":  "2026-05-04",
+                                "fim":  "2026-05-10",
+                                "label":  "Semana de 04/05/2026 a 10/05/2026"
+                            },
+                 "gerado_em":  "2026-05-11T18:13:11.963Z",
+                 "gerado_em_br":  "11/05/2026, 14:13:11",
+                 "total_demandas_tocadas":  12,
+                 "total_apontamentos":  25,
+                 "total_minutos_originais_lancamentos":  5901,
+                 "total_minutos_semana":  5066,
+                 "total_horas_semana":  "84h26",
+                 "fonte":  "FocusTrack + SharePoint"
+             },
+    "metricas":  {
+                     "demandas_sem_comentario":  1,
+                     "apontamentos_sem_demanda":  0,
+                     "apontamentos_com_comentario_pendente":  4
+                 },
+    "alertas":  [
+                    {
+                        "tipo":  "apontamento_atravessa_semana",
+                        "demanda_id":  "91",
+                        "apontamento_id":  "62",
+                        "mensagem":  "Apontamento #62 atravessa o limite da semana (Original: 5608min, Na Semana: 4773min)."
+                    },
+                    {
+                        "tipo":  "comentario_nao_confirmado",
+                        "demanda_id":  "76",
+                        "apontamento_id":  "47",
+                        "mensagem":  "Apontamento #47 possui comentário pendente de envio."
+                    },
+                    {
+                        "tipo":  "comentario_nao_confirmado",
+                        "demanda_id":  "76",
+                        "apontamento_id":  "49",
+                        "mensagem":  "Apontamento #49 possui comentário pendente de envio."
+                    },
+                    {
+                        "tipo":  "comentario_nao_confirmado",
+                        "demanda_id":  "85",
+                        "apontamento_id":  "50",
+                        "mensagem":  "Apontamento #50 possui comentário pendente de envio."
+                    },
+                    {
+                        "tipo":  "comentario_nao_confirmado",
+                        "demanda_id":  "85",
+                        "apontamento_id":  "51",
+                        "mensagem":  "Apontamento #51 possui comentário pendente de envio."
+                    },
+                    {
+                        "tipo":  "demanda_sem_comentario",
+                        "demanda_id":  "91",
+                        "apontamento_id":  null,
+                        "mensagem":  "Demanda #91 não possui comentários centrais em nenhum apontamento desta semana."
+                    }
+                ],
+    "demandas":  [
+                     {
+                         "id":  "76",
+                         "titulo":  "Adequar onix para renomeação de arquivos XML",
+                         "status":  "Em andamento",
+                         "tipo":  "Chamado",
+                         "departamento":  "",
+                         "origem":  "FocusTrack",
+                         "descricao":  "",
+                         "data_criacao":  "2026-05-03T23:57:23Z",
+                         "data_conclusao":  null,
+                         "tempo_total_historico_min":  29,
+                         "tempo_total_historico_horas":  "0h29",
+                         "semana":  {
+                                        "tempo_minutos_original":  27,
+                                        "tempo_minutos":  27,
+                                        "tempo_horas":  "0h27",
+                                        "quantidade_apontamentos":  2,
+                                        "concluida_nesta_semana":  false,
+                                        "iniciada_nesta_semana":  false,
+                                        "tem_apontamento_atravessado":  false
+                                    },
+                         "apontamentos":  [
+                                              {
+                                                  "id":  "47",
+                                                  "inicio":  "2026-05-06T14:38:27Z",
+                                                  "fim":  "2026-05-06T15:03:37Z",
+                                                  "minutos":  26,
+                                                  "minutos_original":  26,
+                                                  "minutos_na_semana":  26,
+                                                  "atravessa_limite_semana":  false,
+                                                  "responsavel":  "10",
+                                                  "observacao":  "Pausado pela aplicação",
+                                                  "comentario_enviado":  false,
+                                                  "comentario_raw":  "[FocusTrack] Apontamento pausado\n\nEntrada: 06/05/2026, 10:38\nSaída: 06/05/2026, 11:03\nDuração: 26 min\nResponsável: fernanda@contaudiassessoria.onmicrosoft.com\n\nComentários do foco:\n- 11:03 — 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",
+                                                  "comentarios":  [
+                                                                      {
+                                                                          "horario":  "11:03",
+                                                                          "texto":  "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"
+                                                                      }
+                                                                  ]
+                                              },
+                                              {
+                                                  "id":  "49",
+                                                  "inicio":  "2026-05-06T15:17:55Z",
+                                                  "fim":  "2026-05-06T15:17:59Z",
+                                                  "minutos":  1,
+                                                  "minutos_original":  1,
+                                                  "minutos_na_semana":  1,
+                                                  "atravessa_limite_semana":  false,
+                                                  "responsavel":  "10",
+                                                  "observacao":  "Pausado pela aplicação",
+                                                  "comentario_enviado":  false,
+                                                  "comentario_raw":  "[FocusTrack] Apontamento pausado\n\nEntrada: 06/05/2026, 11:17\nSaída: 06/05/2026, 11:17\nDuração: 1 min\nResponsável: fernanda@contaudiassessoria.onmicrosoft.com\n\nObjetivo:\ntestando\n\nComentários do foco:\n- 11:17 — quantos caracteres tem aqui aZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD",
+                                                  "comentarios":  [
+                                                                      {
+                                                                          "horario":  "11:17",
+                                                                          "texto":  "quantos caracteres tem aqui aZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD"
+                                                                      }
+                                                                  ]
+                                              }
+                                          ],
+                         "comentarios_consolidados":  [
+                                                          {
+                                                              "horario":  "11:03",
+                                                              "texto":  "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"
+                                                          },
+                                                          {
+                                                              "horario":  "11:17",
+                                                              "texto":  "quantos caracteres tem aqui aZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD"
+                                                          }
+                                                      ]
+                     },
+                     {
+                         "id":  "77",
+                         "titulo":  "Atualizar Domínio - Máquina Gestor",
+                         "status":  "Concluído",
+                         "tipo":  "Chamado",
+                         "departamento":  "",
+                         "origem":  "FocusTrack",
+                         "descricao":  "",
+                         "data_criacao":  "2026-05-04T11:38:50Z",
+                         "data_conclusao":  "2026-05-04T11:43:46Z",
+                         "tempo_total_historico_min":  5,
+                         "tempo_total_historico_horas":  "0h05",
+                         "semana":  {
+                                        "tempo_minutos_original":  5,
+                                        "tempo_minutos":  5,
+                                        "tempo_horas":  "0h05",
+                                        "quantidade_apontamentos":  1,
+                                        "concluida_nesta_semana":  true,
+                                        "iniciada_nesta_semana":  true,
+                                        "tem_apontamento_atravessado":  false
+                                    },
+                         "apontamentos":  [
+                                              {
+                                                  "id":  "38",
+                                                  "inicio":  "2026-05-04T11:38:53Z",
+                                                  "fim":  "2026-05-04T11:43:46Z",
+                                                  "minutos":  5,
+                                                  "minutos_original":  5,
+                                                  "minutos_na_semana":  5,
+                                                  "atravessa_limite_semana":  false,
+                                                  "responsavel":  "10",
+                                                  "observacao":  "Concluído pela aplicação",
+                                                  "comentario_enviado":  true,
+                                                  "comentario_raw":  "[FocusTrack] Apontamento concluído\n\nEntrada: 04/05/2026, 07:38\nSaída: 04/05/2026, 07:43\nDuração: 5 min\nResponsável: fernanda@contaudiassessoria.onmicrosoft.com\n\nObjetivo:\nVerificar pendencia de atualizações no terminal 192.168.0.1 \\\\shark",
+                                                  "comentarios":  [
+
+                                                                  ]
+                                              }
+                                          ],
+                         "comentarios_consolidados":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "79",
+                         "titulo":  "Trocar nome de utilizador Estágio - Fiscal para DAVID TAFAREL no azure",
+                         "status":  "Concluído",
+                         "tipo":  "Chamado",
+                         "departamento":  "",
+                         "origem":  "FocusTrack",
+                         "descricao":  "",
+                         "data_criacao":  "2026-05-04T14:45:25Z",
+                         "data_conclusao":  "2026-05-04T14:51:24Z",
+                         "tempo_total_historico_min":  6,
+                         "tempo_total_historico_horas":  "0h06",
+                         "semana":  {
+                                        "tempo_minutos_original":  6,
+                                        "tempo_minutos":  6,
+                                        "tempo_horas":  "0h06",
+                                        "quantidade_apontamentos":  1,
+                                        "concluida_nesta_semana":  true,
+                                        "iniciada_nesta_semana":  true,
+                                        "tem_apontamento_atravessado":  false
+                                    },
+                         "apontamentos":  [
+                                              {
+                                                  "id":  "39",
+                                                  "inicio":  "2026-05-04T14:45:28Z",
+                                                  "fim":  "2026-05-04T14:51:24Z",
+                                                  "minutos":  6,
+                                                  "minutos_original":  6,
+                                                  "minutos_na_semana":  6,
+                                                  "atravessa_limite_semana":  false,
+                                                  "responsavel":  "10",
+                                                  "observacao":  "Concluído pela aplicação",
+                                                  "comentario_enviado":  true,
+                                                  "comentario_raw":  "[FocusTrack] Apontamento concluído\n\nEntrada: 04/05/2026, 10:45\nSaída: 04/05/2026, 10:51\nDuração: 6 min\nResponsável: fernanda@contaudiassessoria.onmicrosoft.com",
+                                                  "comentarios":  [
+
+                                                                  ]
+                                              }
+                                          ],
+                         "comentarios_consolidados":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "80",
+                         "titulo":  "Adicionar usuários a grupo de tecnologia",
+                         "status":  "Concluído",
+                         "tipo":  "Chamado",
+                         "departamento":  "",
+                         "origem":  "FocusTrack",
+                         "descricao":  "",
+                         "data_criacao":  "2026-05-04T15:04:10Z",
+                         "data_conclusao":  "2026-05-04T15:06:36Z",
+                         "tempo_total_historico_min":  3,
+                         "tempo_total_historico_horas":  "0h03",
+                         "semana":  {
+                                        "tempo_minutos_original":  3,
+                                        "tempo_minutos":  3,
+                                        "tempo_horas":  "0h03",
+                                        "quantidade_apontamentos":  1,
+                                        "concluida_nesta_semana":  true,
+                                        "iniciada_nesta_semana":  true,
+                                        "tem_apontamento_atravessado":  false
+                                    },
+                         "apontamentos":  [
+                                              {
+                                                  "id":  "40",
+                                                  "inicio":  "2026-05-04T15:04:12Z",
+                                                  "fim":  "2026-05-04T15:06:36Z",
+                                                  "minutos":  3,
+                                                  "minutos_original":  3,
+                                                  "minutos_na_semana":  3,
+                                                  "atravessa_limite_semana":  false,
+                                                  "responsavel":  "10",
+                                                  "observacao":  "Concluído pela aplicação",
+                                                  "comentario_enviado":  true,
+                                                  "comentario_raw":  "[FocusTrack] Apontamento concluído\n\nEntrada: 04/05/2026, 11:04\nSaída: 04/05/2026, 11:06\nDuração: 3 min\nResponsável: fernanda@contaudiassessoria.onmicrosoft.com",
+                                                  "comentarios":  [
+
+                                                                  ]
+                                              }
+                                          ],
+                         "comentarios_consolidados":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "83",
+                         "titulo":  "Mudar para pasta de postagem do robô - fluxo AutoSPED",
+                         "status":  "Concluído",
+                         "tipo":  "Chamado",
+                         "departamento":  "",
+                         "origem":  "FocusTrack",
+                         "descricao":  "",
+                         "data_criacao":  "2026-05-05T12:16:04Z",
+                         "data_conclusao":  "2026-05-05T20:30:24Z",
+                         "tempo_total_historico_min":  3,
+                         "tempo_total_historico_horas":  "0h03",
+                         "semana":  {
+                                        "tempo_minutos_original":  3,
+                                        "tempo_minutos":  3,
+                                        "tempo_horas":  "0h03",
+                                        "quantidade_apontamentos":  1,
+                                        "concluida_nesta_semana":  true,
+                                        "iniciada_nesta_semana":  true,
+                                        "tem_apontamento_atravessado":  false
+                                    },
+                         "apontamentos":  [
+                                              {
+                                                  "id":  "43",
+                                                  "inicio":  "2026-05-05T20:27:29Z",
+                                                  "fim":  "2026-05-05T20:30:24Z",
+                                                  "minutos":  3,
+                                                  "minutos_original":  3,
+                                                  "minutos_na_semana":  3,
+                                                  "atravessa_limite_semana":  false,
+                                                  "responsavel":  "10",
+                                                  "observacao":  "Concluído pela aplicação",
+                                                  "comentario_enviado":  true,
+                                                  "comentario_raw":  "[FocusTrack] Apontamento concluído\n\nEntrada: 05/05/2026, 16:27\nSaída: 05/05/2026, 16:30\nDuração: 3 min\nResponsável: fernanda@contaudiassessoria.onmicrosoft.com\n\nObjetivo:\nemail criado por RAQUEL\nusuário dominio: ROBO\nusuário acessórias: robo@escritoriocontaudi.com.br",
+                                                  "comentarios":  [
+
+                                                                  ]
+                                              }
+                                          ],
+                         "comentarios_consolidados":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "84",
+                         "titulo":  "Problema com assinatura DCTFweb - API INTEGRACONTADOR - CONTAI",
+                         "status":  "Concluído",
+                         "tipo":  "Chamado",
+                         "departamento":  "Fiscal",
+                         "origem":  "FocusTrack",
+                         "descricao":  "",
+                         "data_criacao":  "2026-05-05T12:29:02Z",
+                         "data_conclusao":  "2026-05-05T15:55:30Z",
+                         "tempo_total_historico_min":  206,
+                         "tempo_total_historico_horas":  "3h26",
+                         "semana":  {
+                                        "tempo_minutos_original":  206,
+                                        "tempo_minutos":  206,
+                                        "tempo_horas":  "3h26",
+                                        "quantidade_apontamentos":  1,
+                                        "concluida_nesta_semana":  true,
+                                        "iniciada_nesta_semana":  true,
+                                        "tem_apontamento_atravessado":  false
+                                    },
+                         "apontamentos":  [
+                                              {
+                                                  "id":  "41",
+                                                  "inicio":  "2026-05-05T12:30:00Z",
+                                                  "fim":  "2026-05-05T15:55:30Z",
+                                                  "minutos":  206,
+                                                  "minutos_original":  206,
+                                                  "minutos_na_semana":  206,
+                                                  "atravessa_limite_semana":  false,
+                                                  "responsavel":  "10",
+                                                  "observacao":  "Concluído pela aplicação",
+                                                  "comentario_enviado":  true,
+                                                  "comentario_raw":  "[FocusTrack] Apontamento concluído\n\nEntrada: 05/05/2026, 08:30\nSaída: 05/05/2026, 11:55\nDuração: 206 min\nResponsável: fernanda@contaudiassessoria.onmicrosoft.com\n\nObjetivo:\nResolver problema de tranmissão dctfweb para envio automatico",
+                                                  "comentarios":  [
+
+                                                                  ]
+                                              }
+                                          ],
+                         "comentarios_consolidados":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "85",
+                         "titulo":  "Onix - Quando nao houver correspondencia ao CNPJ limpar página",
+                         "status":  "Em andamento",
+                         "tipo":  "Chamado",
+                         "departamento":  "",
+                         "origem":  "FocusTrack",
+                         "descricao":  "",
+                         "data_criacao":  "2026-05-05T15:41:23Z",
+                         "data_conclusao":  null,
+                         "tempo_total_historico_min":  16,
+                         "tempo_total_historico_horas":  "0h16",
+                         "semana":  {
+                                        "tempo_minutos_original":  16,
+                                        "tempo_minutos":  16,
+                                        "tempo_horas":  "0h16",
+                                        "quantidade_apontamentos":  4,
+                                        "concluida_nesta_semana":  false,
+                                        "iniciada_nesta_semana":  true,
+                                        "tem_apontamento_atravessado":  false
+                                    },
+                         "apontamentos":  [
+                                              {
+                                                  "id":  "48",
+                                                  "inicio":  "2026-05-06T14:53:49Z",
+                                                  "fim":  "2026-05-06T15:05:10Z",
+                                                  "minutos":  12,
+                                                  "minutos_original":  12,
+                                                  "minutos_na_semana":  12,
+                                                  "atravessa_limite_semana":  false,
+                                                  "responsavel":  "10",
+                                                  "observacao":  "Pausado pela aplicação",
+                                                  "comentario_enviado":  true,
+                                                  "comentario_raw":  "[FocusTrack] Apontamento pausado\n\nEntrada: 06/05/2026, 10:53\nSaída: 06/05/2026, 11:05\nDuração: 12 min\nResponsável: fernanda@contaudiassessoria.onmicrosoft.com\n\nComentários do foco:\n- 11:05 — aZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7",
+                                                  "comentarios":  [
+                                                                      {
+                                                                          "horario":  "11:05",
+                                                                          "texto":  "aZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7"
+                                                                      }
+                                                                  ]
+                                              },
+                                              {
+                                                  "id":  "50",
+                                                  "inicio":  "2026-05-06T15:27:50Z",
+                                                  "fim":  "2026-05-06T15:29:10Z",
+                                                  "minutos":  2,
+                                                  "minutos_original":  2,
+                                                  "minutos_na_semana":  2,
+                                                  "atravessa_limite_semana":  false,
+                                                  "responsavel":  "10",
+                                                  "observacao":  "Pausado pela aplicação",
+                                                  "comentario_enviado":  false,
+                                                  "comentario_raw":  "[FocusTrack] Apontamento pausado\n\nEntrada: 06/05/2026, 11:27\nSaída: 06/05/2026, 11:29\nDuração: 2 min\nResponsável: fernanda@contaudiassessoria.onmicrosoft.com\n\nComentários do foco:\n- 11:29 — fasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHH",
+                                                  "comentarios":  [
+                                                                      {
+                                                                          "horario":  "11:29",
+                                                                          "texto":  "fasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHH"
+                                                                      }
+                                                                  ]
+                                              },
+                                              {
+                                                  "id":  "51",
+                                                  "inicio":  "2026-05-06T15:30:50Z",
+                                                  "fim":  "2026-05-06T15:31:02Z",
+                                                  "minutos":  1,
+                                                  "minutos_original":  1,
+                                                  "minutos_na_semana":  1,
+                                                  "atravessa_limite_semana":  false,
+                                                  "responsavel":  "10",
+                                                  "observacao":  "Pausado pela aplicação",
+                                                  "comentario_enviado":  false,
+                                                  "comentario_raw":  "[FocusTrack] Apontamento pausado\n\nEntrada: 06/05/2026, 11:30\nSaída: 06/05/2026, 11:31\nDuração: 1 min\nResponsável: fernanda@contaudiassessoria.onmicrosoft.com\n\nComentários do foco:\n- 11:31 — fasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNO",
+                                                  "comentarios":  [
+                                                                      {
+                                                                          "horario":  "11:31",
+                                                                          "texto":  "fasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNO"
+                                                                      }
+                                                                  ]
+                                              },
+                                              {
+                                                  "id":  "52",
+                                                  "inicio":  "2026-05-06T15:32:08Z",
+                                                  "fim":  "2026-05-06T15:32:14Z",
+                                                  "minutos":  1,
+                                                  "minutos_original":  1,
+                                                  "minutos_na_semana":  1,
+                                                  "atravessa_limite_semana":  false,
+                                                  "responsavel":  "10",
+                                                  "observacao":  "Pausado pela aplicação",
+                                                  "comentario_enviado":  true,
+                                                  "comentario_raw":  "[FocusTrack] Apontamento pausado\n\nEntrada: 06/05/2026, 11:32\nSaída: 06/05/2026, 11:32\nDuração: 1 min\nResponsável: fernanda@contaudiassessoria.onmicrosoft.com\n\nComentários do foco:\n- 11:32 — fasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK",
+                                                  "comentarios":  [
+                                                                      {
+                                                                          "horario":  "11:32",
+                                                                          "texto":  "fasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK"
+                                                                      }
+                                                                  ]
+                                              }
+                                          ],
+                         "comentarios_consolidados":  [
+                                                          {
+                                                              "horario":  "11:05",
+                                                              "texto":  "aZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7Er4Ty8UaZ7qR2mN9vB4xKpL0sD8fGhJ3wYcT6uIoP1eQrS5tVyU2iOaF7dHgK9lMzX4nCbV8pWeR0jQsT3yUlI6oPaZx9Lm2Qw7"
+                                                          },
+                                                          {
+                                                              "horario":  "11:29",
+                                                              "texto":  "fasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHH"
+                                                          },
+                                                          {
+                                                              "horario":  "11:31",
+                                                              "texto":  "fasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNO"
+                                                          },
+                                                          {
+                                                              "horario":  "11:32",
+                                                              "texto":  "fasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKNKNNKNOfasdmasdlnaofjqpokwdiQWDLKAHSDBHIOAKSDNASHDOPKQMDHQHSDOJIKSMLDKAGUHIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK"
+                                                          }
+                                                      ]
+                     },
+                     {
+                         "id":  "86",
+                         "titulo":  "Manutenção PC SIMONE - Excel está perdendo trabalho salvo",
+                         "status":  "Concluído",
+                         "tipo":  "Chamado",
+                         "departamento":  "",
+                         "origem":  "FocusTrack",
+                         "descricao":  "",
+                         "data_criacao":  "2026-05-05T19:47:56Z",
+                         "data_conclusao":  "2026-05-05T19:54:00Z",
+                         "tempo_total_historico_min":  2,
+                         "tempo_total_historico_horas":  "0h02",
+                         "semana":  {
+                                        "tempo_minutos_original":  2,
+                                        "tempo_minutos":  2,
+                                        "tempo_horas":  "0h02",
+                                        "quantidade_apontamentos":  1,
+                                        "concluida_nesta_semana":  true,
+                                        "iniciada_nesta_semana":  true,
+                                        "tem_apontamento_atravessado":  false
+                                    },
+                         "apontamentos":  [
+                                              {
+                                                  "id":  "42",
+                                                  "inicio":  "2026-05-05T19:52:24Z",
+                                                  "fim":  "2026-05-05T19:54:00Z",
+                                                  "minutos":  2,
+                                                  "minutos_original":  2,
+                                                  "minutos_na_semana":  2,
+                                                  "atravessa_limite_semana":  false,
+                                                  "responsavel":  "10",
+                                                  "observacao":  "Concluído pela aplicação",
+                                                  "comentario_enviado":  true,
+                                                  "comentario_raw":  "[FocusTrack] Apontamento concluído\n\nEntrada: 05/05/2026, 15:52\nSaída: 05/05/2026, 15:54\nDuração: 2 min\nResponsável: fernanda@contaudiassessoria.onmicrosoft.com\n\nObjetivo:\nRecuperar pasta de trabalho\n\nComentários do foco:\n- 15:53 — Realizado através de %temp% da aplicação",
+                                                  "comentarios":  [
+                                                                      {
+                                                                          "horario":  "15:53",
+                                                                          "texto":  "Realizado através de %temp% da aplicação"
+                                                                      }
+                                                                  ]
+                                              }
+                                          ],
+                         "comentarios_consolidados":  [
+                                                          {
+                                                              "horario":  "15:53",
+                                                              "texto":  "Realizado através de %temp% da aplicação"
+                                                          }
+                                                      ]
+                     },
+                     {
+                         "id":  "87",
+                         "titulo":  "Remapeamento de rede ARTEAGA - Simone",
+                         "status":  "Concluído",
+                         "tipo":  "Chamado",
+                         "departamento":  "",
+                         "origem":  "FocusTrack",
+                         "descricao":  "",
+                         "data_criacao":  "2026-05-05T20:31:42Z",
+                         "data_conclusao":  "2026-05-05T20:35:50Z",
+                         "tempo_total_historico_min":  5,
+                         "tempo_total_historico_horas":  "0h05",
+                         "semana":  {
+                                        "tempo_minutos_original":  5,
+                                        "tempo_minutos":  5,
+                                        "tempo_horas":  "0h05",
+                                        "quantidade_apontamentos":  1,
+                                        "concluida_nesta_semana":  true,
+                                        "iniciada_nesta_semana":  true,
+                                        "tem_apontamento_atravessado":  false
+                                    },
+                         "apontamentos":  [
+                                              {
+                                                  "id":  "44",
+                                                  "inicio":  "2026-05-05T20:31:45Z",
+                                                  "fim":  "2026-05-05T20:35:50Z",
+                                                  "minutos":  5,
+                                                  "minutos_original":  5,
+                                                  "minutos_na_semana":  5,
+                                                  "atravessa_limite_semana":  false,
+                                                  "responsavel":  "10",
+                                                  "observacao":  "Concluído pela aplicação",
+                                                  "comentario_enviado":  true,
+                                                  "comentario_raw":  "[FocusTrack] Apontamento concluído\n\nEntrada: 05/05/2026, 16:31\nSaída: 05/05/2026, 16:35\nDuração: 5 min\nResponsável: fernanda@contaudiassessoria.onmicrosoft.com\n\nObjetivo:\nMapear unidade de rede anitgo ARTEAGA",
+                                                  "comentarios":  [
+
+                                                                  ]
+                                              }
+                                          ],
+                         "comentarios_consolidados":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "88",
+                         "titulo":  "Oi, bom dia! Você poderia logar na minha máquina, não estou tendo acesso ao onedrive?",
+                         "status":  "Concluído",
+                         "tipo":  "Chamado",
+                         "departamento":  "",
+                         "origem":  "Chat Teams",
+                         "descricao":  "",
+                         "data_criacao":  "2026-05-06T12:05:12Z",
+                         "data_conclusao":  "2026-05-06T14:36:34Z",
+                         "tempo_total_historico_min":  11,
+                         "tempo_total_historico_horas":  "0h11",
+                         "semana":  {
+                                        "tempo_minutos_original":  11,
+                                        "tempo_minutos":  11,
+                                        "tempo_horas":  "0h11",
+                                        "quantidade_apontamentos":  2,
+                                        "concluida_nesta_semana":  true,
+                                        "iniciada_nesta_semana":  true,
+                                        "tem_apontamento_atravessado":  false
+                                    },
+                         "apontamentos":  [
+                                              {
+                                                  "id":  "45",
+                                                  "inicio":  "2026-05-06T12:18:37Z",
+                                                  "fim":  "2026-05-06T12:27:41Z",
+                                                  "minutos":  10,
+                                                  "minutos_original":  10,
+                                                  "minutos_na_semana":  10,
+                                                  "atravessa_limite_semana":  false,
+                                                  "responsavel":  "10",
+                                                  "observacao":  "Pausado pela aplicação",
+                                                  "comentario_enviado":  true,
+                                                  "comentario_raw":  "[FocusTrack] Apontamento pausado\n\nEntrada: 06/05/2026, 08:18\nSaída: 06/05/2026, 08:27\nDuração: 10 min\nResponsável: fernanda@contaudiassessoria.onmicrosoft.com",
+                                                  "comentarios":  [
+
+                                                                  ]
+                                              },
+                                              {
+                                                  "id":  "46",
+                                                  "inicio":  "2026-05-06T14:36:26Z",
+                                                  "fim":  "2026-05-06T14:36:34Z",
+                                                  "minutos":  1,
+                                                  "minutos_original":  1,
+                                                  "minutos_na_semana":  1,
+                                                  "atravessa_limite_semana":  false,
+                                                  "responsavel":  "10",
+                                                  "observacao":  "Concluído pela aplicação",
+                                                  "comentario_enviado":  true,
+                                                  "comentario_raw":  "[FocusTrack] Apontamento concluído\n\nEntrada: 06/05/2026, 10:36\nSaída: 06/05/2026, 10:36\nDuração: 1 min\nResponsável: fernanda@contaudiassessoria.onmicrosoft.com",
+                                                  "comentarios":  [
+
+                                                                  ]
+                                              }
+                                          ],
+                         "comentarios_consolidados":  [
+
+                                                      ]
+                     },
+                     {
+                         "id":  "89",
+                         "titulo":  "Precisamos extrair os dados desse pdf, mas ele parece imagem. Tem alguma forma de fazer isso?",
+                         "status":  "Em andamento",
+                         "tipo":  "Chamado",
+                         "departamento":  "",
+                         "origem":  "Chat Teams",
+                         "descricao":  "",
+                         "data_criacao":  "2026-05-07T14:22:07Z",
+                         "data_conclusao":  "2026-05-07T14:32:30Z",
+                         "tempo_total_historico_min":  9,
+                         "tempo_total_historico_horas":  "0h09",
+                         "semana":  {
+                                        "tempo_minutos_original":  9,
+                                        "tempo_minutos":  9,
+                                        "tempo_horas":  "0h09",
+                                        "quantidade_apontamentos":  9,
+                                        "concluida_nesta_semana":  true,
+                                        "iniciada_nesta_semana":  true,
+                                        "tem_apontamento_atravessado":  false
+                                    },
+                         "apontamentos":  [
+                                              {
+                                                  "id":  "53",
+                                                  "inicio":  "2026-05-07T14:22:25Z",
+                                                  "fim":  "2026-05-07T14:23:00Z",
+                                                  "minutos":  1,
+                                                  "minutos_original":  1,
+                                                  "minutos_na_semana":  1,
+                                                  "atravessa_limite_semana":  false,
+                                                  "responsavel":  "10",
+                                                  "observacao":  "Pausado pela aplicação",
+                                                  "comentario_enviado":  true,
+                                                  "comentario_raw":  "[FocusTrack] Apontamento pausado\n\nEntrada: 07/05/2026, 10:22\nSaída: 07/05/2026, 10:23\nDuração: 1 min\nResponsável: fernanda@contaudiassessoria.onmicrosoft.com\n\nComentários do foco:\n- 10:22 — Criado agente na monica para fazer extração de pdfs travados como imagem",
+                                                  "comentarios":  [
+                                                                      {
+                                                                          "horario":  "10:22",
+                                                                          "texto":  "Criado agente na monica para fazer extração de pdfs travados como imagem"
+                                                                      }
+                                                                  ]
+                                              },
+                                              {
+                                                  "id":  "54",
+                                                  "inicio":  "2026-05-07T14:24:15Z",
+                                                  "fim":  "2026-05-07T14:24:24Z",
+                                                  "minutos":  1,
+                                                  "minutos_original":  1,
+                                                  "minutos_na_semana":  1,
+                                                  "atravessa_limite_semana":  false,
+                                                  "responsavel":  "10",
+                                                  "observacao":  "Pausado pela aplicação",
+                                                  "comentario_enviado":  true,
+                                                  "comentario_raw":  "[FocusTrack] Apontamento pausado\n\nEntrada: 07/05/2026, 10:24\nSaída: 07/05/2026, 10:24\nDuração: 1 min\nResponsável: fernanda@contaudiassessoria.onmicrosoft.com\n\nComentários do foco:\n- 10:24 — Foi criado um prompt operacional para uso com agentes de IA capazes de ler imagens/OCR, com o objetivo de converter imagens de extratos bancários em planilhas Excel.  A necessidade surgiu porque os extratos podem vir de bancos diferentes, com layouts, cabeçalhos e colunas variáveis. Por isso, o prompt não trabalha com um modelo fixo. Ele orienta o agente a identificar dinamicamente as colunas existentes na imagem e montar a planilha conforme o documento original.  O foco da solução é garantir fidelidade ao extrato, evitando criação de dados inexistentes, omissão de lançamentos ou padronização indevida de colunas. A regra principal é: ler o que está visível, preservar a estrutura real e sinalizar qualquer dúvida ou campo ilegível.",
+                                                  "comentarios":  [
+                                                                      {
+                                                                          "horario":  "10:24",
+                                                                          "texto":  "Foi criado um prompt operacional para uso com agentes de IA capazes de ler imagens/OCR, com o objetivo de converter imagens de extratos bancários em planilhas Excel.  A necessidade surgiu porque os extratos podem vir de bancos diferentes, com layouts, cabeçalhos e colunas variáveis. Por isso, o prompt não trabalha com um modelo fixo. Ele orienta o agente a identificar dinamicamente as colunas existentes na imagem e montar a planilha conforme o documento original.  O foco da solução é garantir fidelidade ao extrato, evitando criação de dados inexistentes, omissão de lançamentos ou padronização indevida de colunas. A regra principal é: ler o que está visível, preservar a estrutura real e sinalizar qualquer dúvida ou campo ilegível."
+                                                                      }
+                                                                  ]
+                                              },
+                                              {
+                                                  "id":  "55",
+                                                  "inicio":  "2026-05-07T14:24:33Z",
+                                                  "fim":  "2026-05-07T14:24:47Z",
+                                                  "minutos":  1,
+                                                  "minutos_original":  1,
+                                                  "minutos_na_semana":  1,
+                                                  "atravessa_limite_semana":  false,
+                                                  "responsavel":  "10",
+                                                  "observacao":  "Pausado pela aplicação",
+                                                  "comentario_enviado":  true,
+                                                  "comentario_raw":  "[FocusTrack] Apontamento pausado\n\nEntrada: 07/05/2026, 10:24\nSaída: 07/05/2026, 10:24\nDuração: 1 min\nResponsável: fernanda@contaudiassessoria.onmicrosoft.com\n\nComentários do foco:\n- 10:24 — O prompt foi estruturado para extrair o conteúdo completo de imagens de extratos bancários, incluindo lançamentos, saldos, cabeçalhos e informações complementares.  A extração deve considerar, quando disponíveis: - banco; - titular; - CPF/CNPJ; - agência; - conta; - período do extrato; - data de emissão; - lançamentos; - documentos; - descrições; - valores; - débitos; - créditos; - saldo anterior; - saldo do dia; - saldo final; - totais e demais informações visíveis.  Como cada banco pode apresentar colunas diferentes, a orientação é não forçar um padrão único. O agente deve respeitar as colunas existentes na imagem, mantendo a ordem visual original sempre que possível.",
+                                                  "comentarios":  [
+                                                                      {
+                                                                          "horario":  "10:24",
+                                                                          "texto":  "O prompt foi estruturado para extrair o conteúdo completo de imagens de extratos bancários, incluindo lançamentos, saldos, cabeçalhos e informações complementares.  A extração deve considerar, quando disponíveis: - banco; - titular; - CPF/CNPJ; - agência; - conta; - período do extrato; - data de emissão; - lançamentos; - documentos; - descrições; - valores; - débitos; - créditos; - saldo anterior; - saldo do dia; - saldo final; - totais e demais informações visíveis.  Como cada banco pode apresentar colunas diferentes, a orientação é não forçar um padrão único. O agente deve respeitar as colunas existentes na imagem, mantendo a ordem visual original sempre que possível."
+                                                                      }
+                                                                  ]
+                                              },
+                                              {
+                                                  "id":  "56",
+                                                  "inicio":  "2026-05-07T14:24:56Z",
+                                                  "fim":  "2026-05-07T14:25:03Z",
+                                                  "minutos":  1,
+                                                  "minutos_original":  1,
+                                                  "minutos_na_semana":  1,
+                                                  "atravessa_limite_semana":  false,
+                                                  "responsavel":  "10",
+                                                  "observacao":  "Pausado pela aplicação",
+                                                  "comentario_enviado":  true,
+                                                  "comentario_raw":  "[FocusTrack] Apontamento pausado\n\nEntrada: 07/05/2026, 10:24\nSaída: 07/05/2026, 10:25\nDuração: 1 min\nResponsável: fernanda@contaudiassessoria.onmicrosoft.com\n\nComentários do foco:\n- 10:24 — Foram definidas regras de qualidade para reduzir erros comuns de OCR e interpretação.  O agente deve: - não inventar dados; - não presumir lançamentos ausentes; - manter a ordem dos lançamentos; - preservar as colunas reais do extrato; - unir descrições quebradas em várias linhas quando forem do mesmo lançamento; - ignorar cabeçalhos repetidos no meio da tabela, salvo quando indicarem nova seção; - sinalizar campos ilegíveis com “ILEGÍVEL”; - sinalizar dúvidas com “DÚVIDA: opção1 / opção2”; - não misturar layouts incompatíveis em uma mesma aba; - criar abas separadas quando houver bancos ou estruturas diferentes.  A intenção é transformar a imagem em uma base de dados confiável para conferência, importação, conciliação ou análise posterior no Excel.",
+                                                  "comentarios":  [
+                                                                      {
+                                                                          "horario":  "10:24",
+                                                                          "texto":  "Foram definidas regras de qualidade para reduzir erros comuns de OCR e interpretação.  O agente deve: - não inventar dados; - não presumir lançamentos ausentes; - manter a ordem dos lançamentos; - preservar as colunas reais do extrato; - unir descrições quebradas em várias linhas quando forem do mesmo lançamento; - ignorar cabeçalhos repetidos no meio da tabela, salvo quando indicarem nova seção; - sinalizar campos ilegíveis com “ILEGÍVEL”; - sinalizar dúvidas com “DÚVIDA: opção1 / opção2”; - não misturar layouts incompatíveis em uma mesma aba; - criar abas separadas quando houver bancos ou estruturas diferentes.  A intenção é transformar a imagem em uma base de dados confiável para conferência, importação, conciliação ou análise posterior no Excel."
+                                                                      }
+                                                                  ]
+                                              },
+                                              {
+                                                  "id":  "57",
+                                                  "inicio":  "2026-05-07T14:25:08Z",
+                                                  "fim":  "2026-05-07T14:25:17Z",
+                                                  "minutos":  1,
+                                                  "minutos_original":  1,
+                                                  "minutos_na_semana":  1,
+                                                  "atravessa_limite_semana":  false,
+                                                  "responsavel":  "10",
+                                                  "observacao":  "Pausado pela aplicação",
+                                                  "comentario_enviado":  true,
+                                                  "comentario_raw":  "[FocusTrack] Apontamento pausado\n\nEntrada: 07/05/2026, 10:25\nSaída: 07/05/2026, 10:25\nDuração: 1 min\nResponsável: fernanda@contaudiassessoria.onmicrosoft.com\n\nComentários do foco:\n- 10:25 — A saída ideal definida para o processo é um arquivo Excel `.xlsx` contendo, no mínimo, três abas:  1. `Lancamentos` Aba principal com os lançamentos extraídos da imagem. As colunas devem seguir o extrato original, sem imposição de layout fixo.  2. `Cabecalho_Extrato` Aba para registrar informações gerais identificadas na imagem, como banco, titular, agência, conta, período, data de emissão e página.  3. `Observacoes_OCR` Aba para registrar dúvidas, campos ilegíveis, baixa qualidade de imagem, valores incertos ou decisões tomadas durante a extração.  Caso o agente não consiga gerar `.xlsx`, a alternativa é entregar CSV compatível com Excel brasileiro, usando ponto e vírgula como separador e vírgula como decimal.",
+                                                  "comentarios":  [
+                                                                      {
+                                                                          "horario":  "10:25",
+                                                                          "texto":  "A saída ideal definida para o processo é um arquivo Excel `.xlsx` contendo, no mínimo, três abas:  1. `Lancamentos` Aba principal com os lançamentos extraídos da imagem. As colunas devem seguir o extrato original, sem imposição de layout fixo.  2. `Cabecalho_Extrato` Aba para registrar informações gerais identificadas na imagem, como banco, titular, agência, conta, período, data de emissão e página.  3. `Observacoes_OCR` Aba para registrar dúvidas, campos ilegíveis, baixa qualidade de imagem, valores incertos ou decisões tomadas durante a extração.  Caso o agente não consiga gerar `.xlsx`, a alternativa é entregar CSV compatível com Excel brasileiro, usando ponto e vírgula como separador e vírgula como decimal."
+                                                                      }
+                                                                  ]
+                                              },
+                                              {
+                                                  "id":  "58",
+                                                  "inicio":  "2026-05-07T14:25:25Z",
+                                                  "fim":  "2026-05-07T14:25:40Z",
+                                                  "minutos":  1,
+                                                  "minutos_original":  1,
+                                                  "minutos_na_semana":  1,
+                                                  "atravessa_limite_semana":  false,
+                                                  "responsavel":  "10",
+                                                  "observacao":  "Pausado pela aplicação",
+                                                  "comentario_enviado":  true,
+                                                  "comentario_raw":  "[FocusTrack] Apontamento pausado\n\nEntrada: 07/05/2026, 10:25\nSaída: 07/05/2026, 10:25\nDuração: 1 min\nResponsável: fernanda@contaudiassessoria.onmicrosoft.com\n\nComentários do foco:\n- 10:25 — O prompt foi preparado para lidar com extratos de bancos diferentes, sem depender de um modelo pré-definido.  Se as imagens forem de um mesmo extrato, o agente deve consolidar os lançamentos na ordem correta. Se forem de bancos ou layouts diferentes, a orientação é criar abas separadas para evitar mistura indevida de estruturas.  Exemplo: - `Lancamentos_Banco_Inter` - `Lancamentos_Sicredi` - `Lancamentos_Caixa` - `Resumo` - `Saldos` - `Observacoes_OCR`  Essa regra evita que colunas diferentes sejam forçadas em uma única tabela e melhora a confiabilidade da planilha final.\n- 10:25 — Foi incluída orientação específica para padronização de datas e valores.  As datas devem ser formatadas em padrão brasileiro `DD/MM/AAAA` quando houver informação suficiente. Se a imagem mostrar apenas dia e mês, o agente deve usar o ano do período do extrato, desde que ele esteja visível no cabeçalho. Se não houver ano disponível, a data deve ser mantida como aparece no documento.  Os valores monetários devem ser preservados com atenção ao sinal de débito/crédito. Se o extrato tiver colunas separadas para débito e crédito, essa estrutura deve ser mantida. Se houver uma única coluna de valor, os débitos devem ficar negativos quando isso estiver claro no extrato.  Valores duvidosos ou ilegíveis não devem ser “corrigidos” por suposição.",
+                                                  "comentarios":  [
+                                                                      {
+                                                                          "horario":  "10:25",
+                                                                          "texto":  "O prompt foi preparado para lidar com extratos de bancos diferentes, sem depender de um modelo pré-definido.  Se as imagens forem de um mesmo extrato, o agente deve consolidar os lançamentos na ordem correta. Se forem de bancos ou layouts diferentes, a orientação é criar abas separadas para evitar mistura indevida de estruturas.  Exemplo: - `Lancamentos_Banco_Inter` - `Lancamentos_Sicredi` - `Lancamentos_Caixa` - `Resumo` - `Saldos` - `Observacoes_OCR`  Essa regra evita que colunas diferentes sejam forçadas em uma única tabela e melhora a confiabilidade da planilha final."
+                                                                      },
+                                                                      {
+                                                                          "horario":  "10:25",
+                                                                          "texto":  "Foi incluída orientação específica para padronização de datas e valores.  As datas devem ser formatadas em padrão brasileiro `DD/MM/AAAA` quando houver informação suficiente. Se a imagem mostrar apenas dia e mês, o agente deve usar o ano do período do extrato, desde que ele esteja visível no cabeçalho. Se não houver ano disponível, a data deve ser mantida como aparece no documento.  Os valores monetários devem ser preservados com atenção ao sinal de débito/crédito. Se o extrato tiver colunas separadas para débito e crédito, essa estrutura deve ser mantida. Se houver uma única coluna de valor, os débitos devem ficar negativos quando isso estiver claro no extrato.  Valores duvidosos ou ilegíveis não devem ser “corrigidos” por suposição."
+                                                                      }
+                                                                  ]
+                                              },
+                                              {
+                                                  "id":  "59",
+                                                  "inicio":  "2026-05-07T14:26:31Z",
+                                                  "fim":  "2026-05-07T14:26:46Z",
+                                                  "minutos":  1,
+                                                  "minutos_original":  1,
+                                                  "minutos_na_semana":  1,
+                                                  "atravessa_limite_semana":  false,
+                                                  "responsavel":  "10",
+                                                  "observacao":  "Pausado pela aplicação",
+                                                  "comentario_enviado":  true,
+                                                  "comentario_raw":  "[FocusTrack] Apontamento pausado\n\nEntrada: 07/05/2026, 10:26\nSaída: 07/05/2026, 10:26\nDuração: 1 min\nResponsável: fernanda@contaudiassessoria.onmicrosoft.com\n\nComentários do foco:\n- 10:26 — Antes de entregar a planilha, o agente deve realizar uma conferência final.  Checklist obrigatório: - todas as linhas visíveis foram extraídas; - todas as colunas visíveis foram consideradas; - a ordem dos lançamentos foi mantida; - os valores estão coerentes com débito/crédito; - saldos, totais e linhas de fechamento foram preservados; - campos ilegíveis foram sinalizados; - dúvidas foram registradas; - cabeçalhos repetidos não viraram lançamentos; - descrições quebradas foram unificadas corretamente; - layouts diferentes foram separados em abas quando necessário.  A entrega deve priorizar fidelidade ao documento original, não interpretação financeira ou contábil.\n- 10:26 — O processo depende da qualidade da imagem enviada. Imagens cortadas, borradas, inclinadas, com baixa resolução ou reflexo podem gerar campos ilegíveis ou dúvidas na extração.  Sempre que possível, orientar o usuário/equipe a enviar: - imagem nítida; - página completa; - boa iluminação; - sem cortes nas bordas; - sem sobreposição de objetos; - em ordem correta; - uma imagem por página do extrato.  Quando o OCR não conseguir confirmar determinado dado, a instrução é registrar o problema em `Observacoes_OCR`, em vez de tentar adivinhar. Essa prática mantém rastreabilidade e reduz risco de erro em conciliações ou análises posteriores.",
+                                                  "comentarios":  [
+                                                                      {
+                                                                          "horario":  "10:26",
+                                                                          "texto":  "Antes de entregar a planilha, o agente deve realizar uma conferência final.  Checklist obrigatório: - todas as linhas visíveis foram extraídas; - todas as colunas visíveis foram consideradas; - a ordem dos lançamentos foi mantida; - os valores estão coerentes com débito/crédito; - saldos, totais e linhas de fechamento foram preservados; - campos ilegíveis foram sinalizados; - dúvidas foram registradas; - cabeçalhos repetidos não viraram lançamentos; - descrições quebradas foram unificadas corretamente; - layouts diferentes foram separados em abas quando necessário.  A entrega deve priorizar fidelidade ao documento original, não interpretação financeira ou contábil."
+                                                                      },
+                                                                      {
+                                                                          "horario":  "10:26",
+                                                                          "texto":  "O processo depende da qualidade da imagem enviada. Imagens cortadas, borradas, inclinadas, com baixa resolução ou reflexo podem gerar campos ilegíveis ou dúvidas na extração.  Sempre que possível, orientar o usuário/equipe a enviar: - imagem nítida; - página completa; - boa iluminação; - sem cortes nas bordas; - sem sobreposição de objetos; - em ordem correta; - uma imagem por página do extrato.  Quando o OCR não conseguir confirmar determinado dado, a instrução é registrar o problema em `Observacoes_OCR`, em vez de tentar adivinhar. Essa prática mantém rastreabilidade e reduz risco de erro em conciliações ou análises posteriores."
+                                                                      }
+                                                                  ]
+                                              },
+                                              {
+                                                  "id":  "60",
+                                                  "inicio":  "2026-05-07T14:26:49Z",
+                                                  "fim":  "2026-05-07T14:26:56Z",
+                                                  "minutos":  1,
+                                                  "minutos_original":  1,
+                                                  "minutos_na_semana":  1,
+                                                  "atravessa_limite_semana":  false,
+                                                  "responsavel":  "10",
+                                                  "observacao":  "Pausado pela aplicação",
+                                                  "comentario_enviado":  true,
+                                                  "comentario_raw":  "[FocusTrack] Apontamento pausado\n\nEntrada: 07/05/2026, 10:26\nSaída: 07/05/2026, 10:26\nDuração: 1 min\nResponsável: fernanda@contaudiassessoria.onmicrosoft.com\n\nComentários do foco:\n- 10:26 — Com o prompt criado, a equipe passa a ter um procedimento padronizado para transformar imagens de extratos bancários em planilhas estruturadas.  O resultado esperado é uma planilha pronta para Excel, contendo: - lançamentos extraídos; - cabeçalho do extrato; - observações de OCR; - preservação das colunas reais; - separação de layouts quando necessário; - sinalização de campos ilegíveis; - redução de retrabalho manual.  Esse padrão pode ser usado para bancos diferentes e deve servir como base para rotinas de conferência, conciliação bancária, organização documental e alimentação de controles internos.",
+                                                  "comentarios":  [
+                                                                      {
+                                                                          "horario":  "10:26",
+                                                                          "texto":  "Com o prompt criado, a equipe passa a ter um procedimento padronizado para transformar imagens de extratos bancários em planilhas estruturadas.  O resultado esperado é uma planilha pronta para Excel, contendo: - lançamentos extraídos; - cabeçalho do extrato; - observações de OCR; - preservação das colunas reais; - separação de layouts quando necessário; - sinalização de campos ilegíveis; - redução de retrabalho manual.  Esse padrão pode ser usado para bancos diferentes e deve servir como base para rotinas de conferência, conciliação bancária, organização documental e alimentação de controles internos."
+                                                                      }
+                                                                  ]
+                                              },
+                                              {
+                                                  "id":  "61",
+                                                  "inicio":  "2026-05-07T14:32:05Z",
+                                                  "fim":  "2026-05-07T14:32:30Z",
+                                                  "minutos":  1,
+                                                  "minutos_original":  1,
+                                                  "minutos_na_semana":  1,
+                                                  "atravessa_limite_semana":  false,
+                                                  "responsavel":  "10",
+                                                  "observacao":  "Concluído pela aplicação",
+                                                  "comentario_enviado":  true,
+                                                  "comentario_raw":  "[FocusTrack] Apontamento pausado\n\nEntrada: 07/05/2026, 10:32\nSaída: 07/05/2026, 10:32\nDuração: 1 min\nResponsável: fernanda@contaudiassessoria.onmicrosoft.com\n\nComentários do foco:\n- 10:32 — Agente disponibilizado no link: https://monica.im/share/monica-agent?id=3DOruXApr9twczUnfqZ5fzD4ojM",
+                                                  "comentarios":  [
+                                                                      {
+                                                                          "horario":  "10:32",
+                                                                          "texto":  "Agente disponibilizado no link: https://monica.im/share/monica-agent?id=3DOruXApr9twczUnfqZ5fzD4ojM"
+                                                                      }
+                                                                  ]
+                                              }
+                                          ],
+                         "comentarios_consolidados":  [
+                                                          {
+                                                              "horario":  "10:22",
+                                                              "texto":  "Criado agente na monica para fazer extração de pdfs travados como imagem"
+                                                          },
+                                                          {
+                                                              "horario":  "10:24",
+                                                              "texto":  "Foi criado um prompt operacional para uso com agentes de IA capazes de ler imagens/OCR, com o objetivo de converter imagens de extratos bancários em planilhas Excel.  A necessidade surgiu porque os extratos podem vir de bancos diferentes, com layouts, cabeçalhos e colunas variáveis. Por isso, o prompt não trabalha com um modelo fixo. Ele orienta o agente a identificar dinamicamente as colunas existentes na imagem e montar a planilha conforme o documento original.  O foco da solução é garantir fidelidade ao extrato, evitando criação de dados inexistentes, omissão de lançamentos ou padronização indevida de colunas. A regra principal é: ler o que está visível, preservar a estrutura real e sinalizar qualquer dúvida ou campo ilegível."
+                                                          },
+                                                          {
+                                                              "horario":  "10:24",
+                                                              "texto":  "O prompt foi estruturado para extrair o conteúdo completo de imagens de extratos bancários, incluindo lançamentos, saldos, cabeçalhos e informações complementares.  A extração deve considerar, quando disponíveis: - banco; - titular; - CPF/CNPJ; - agência; - conta; - período do extrato; - data de emissão; - lançamentos; - documentos; - descrições; - valores; - débitos; - créditos; - saldo anterior; - saldo do dia; - saldo final; - totais e demais informações visíveis.  Como cada banco pode apresentar colunas diferentes, a orientação é não forçar um padrão único. O agente deve respeitar as colunas existentes na imagem, mantendo a ordem visual original sempre que possível."
+                                                          },
+                                                          {
+                                                              "horario":  "10:24",
+                                                              "texto":  "Foram definidas regras de qualidade para reduzir erros comuns de OCR e interpretação.  O agente deve: - não inventar dados; - não presumir lançamentos ausentes; - manter a ordem dos lançamentos; - preservar as colunas reais do extrato; - unir descrições quebradas em várias linhas quando forem do mesmo lançamento; - ignorar cabeçalhos repetidos no meio da tabela, salvo quando indicarem nova seção; - sinalizar campos ilegíveis com “ILEGÍVEL”; - sinalizar dúvidas com “DÚVIDA: opção1 / opção2”; - não misturar layouts incompatíveis em uma mesma aba; - criar abas separadas quando houver bancos ou estruturas diferentes.  A intenção é transformar a imagem em uma base de dados confiável para conferência, importação, conciliação ou análise posterior no Excel."
+                                                          },
+                                                          {
+                                                              "horario":  "10:25",
+                                                              "texto":  "A saída ideal definida para o processo é um arquivo Excel `.xlsx` contendo, no mínimo, três abas:  1. `Lancamentos` Aba principal com os lançamentos extraídos da imagem. As colunas devem seguir o extrato original, sem imposição de layout fixo.  2. `Cabecalho_Extrato` Aba para registrar informações gerais identificadas na imagem, como banco, titular, agência, conta, período, data de emissão e página.  3. `Observacoes_OCR` Aba para registrar dúvidas, campos ilegíveis, baixa qualidade de imagem, valores incertos ou decisões tomadas durante a extração.  Caso o agente não consiga gerar `.xlsx`, a alternativa é entregar CSV compatível com Excel brasileiro, usando ponto e vírgula como separador e vírgula como decimal."
+                                                          },
+                                                          {
+                                                              "horario":  "10:25",
+                                                              "texto":  "O prompt foi preparado para lidar com extratos de bancos diferentes, sem depender de um modelo pré-definido.  Se as imagens forem de um mesmo extrato, o agente deve consolidar os lançamentos na ordem correta. Se forem de bancos ou layouts diferentes, a orientação é criar abas separadas para evitar mistura indevida de estruturas.  Exemplo: - `Lancamentos_Banco_Inter` - `Lancamentos_Sicredi` - `Lancamentos_Caixa` - `Resumo` - `Saldos` - `Observacoes_OCR`  Essa regra evita que colunas diferentes sejam forçadas em uma única tabela e melhora a confiabilidade da planilha final."
+                                                          },
+                                                          {
+                                                              "horario":  "10:25",
+                                                              "texto":  "Foi incluída orientação específica para padronização de datas e valores.  As datas devem ser formatadas em padrão brasileiro `DD/MM/AAAA` quando houver informação suficiente. Se a imagem mostrar apenas dia e mês, o agente deve usar o ano do período do extrato, desde que ele esteja visível no cabeçalho. Se não houver ano disponível, a data deve ser mantida como aparece no documento.  Os valores monetários devem ser preservados com atenção ao sinal de débito/crédito. Se o extrato tiver colunas separadas para débito e crédito, essa estrutura deve ser mantida. Se houver uma única coluna de valor, os débitos devem ficar negativos quando isso estiver claro no extrato.  Valores duvidosos ou ilegíveis não devem ser “corrigidos” por suposição."
+                                                          },
+                                                          {
+                                                              "horario":  "10:26",
+                                                              "texto":  "Antes de entregar a planilha, o agente deve realizar uma conferência final.  Checklist obrigatório: - todas as linhas visíveis foram extraídas; - todas as colunas visíveis foram consideradas; - a ordem dos lançamentos foi mantida; - os valores estão coerentes com débito/crédito; - saldos, totais e linhas de fechamento foram preservados; - campos ilegíveis foram sinalizados; - dúvidas foram registradas; - cabeçalhos repetidos não viraram lançamentos; - descrições quebradas foram unificadas corretamente; - layouts diferentes foram separados em abas quando necessário.  A entrega deve priorizar fidelidade ao documento original, não interpretação financeira ou contábil."
+                                                          },
+                                                          {
+                                                              "horario":  "10:26",
+                                                              "texto":  "O processo depende da qualidade da imagem enviada. Imagens cortadas, borradas, inclinadas, com baixa resolução ou reflexo podem gerar campos ilegíveis ou dúvidas na extração.  Sempre que possível, orientar o usuário/equipe a enviar: - imagem nítida; - página completa; - boa iluminação; - sem cortes nas bordas; - sem sobreposição de objetos; - em ordem correta; - uma imagem por página do extrato.  Quando o OCR não conseguir confirmar determinado dado, a instrução é registrar o problema em `Observacoes_OCR`, em vez de tentar adivinhar. Essa prática mantém rastreabilidade e reduz risco de erro em conciliações ou análises posteriores."
+                                                          },
+                                                          {
+                                                              "horario":  "10:26",
+                                                              "texto":  "Com o prompt criado, a equipe passa a ter um procedimento padronizado para transformar imagens de extratos bancários em planilhas estruturadas.  O resultado esperado é uma planilha pronta para Excel, contendo: - lançamentos extraídos; - cabeçalho do extrato; - observações de OCR; - preservação das colunas reais; - separação de layouts quando necessário; - sinalização de campos ilegíveis; - redução de retrabalho manual.  Esse padrão pode ser usado para bancos diferentes e deve servir como base para rotinas de conferência, conciliação bancária, organização documental e alimentação de controles internos."
+                                                          },
+                                                          {
+                                                              "horario":  "10:32",
+                                                              "texto":  "Agente disponibilizado no link: https://monica.im/share/monica-agent?id=3DOruXApr9twczUnfqZ5fzD4ojM"
+                                                          }
+                                                      ]
+                     },
+                     {
+                         "id":  "91",
+                         "titulo":  "Refatoração Contai",
+                         "status":  "Em andamento",
+                         "tipo":  "Chamado",
+                         "departamento":  "",
+                         "origem":  "FocusTrack",
+                         "descricao":  "",
+                         "data_criacao":  "2026-05-07T20:27:43Z",
+                         "data_conclusao":  null,
+                         "tempo_total_historico_min":  5608,
+                         "tempo_total_historico_horas":  "93h28",
+                         "semana":  {
+                                        "tempo_minutos_original":  5608,
+                                        "tempo_minutos":  4773,
+                                        "tempo_horas":  "79h33",
+                                        "quantidade_apontamentos":  1,
+                                        "concluida_nesta_semana":  false,
+                                        "iniciada_nesta_semana":  true,
+                                        "tem_apontamento_atravessado":  true
+                                    },
+                         "apontamentos":  [
+                                              {
+                                                  "id":  "62",
+                                                  "inicio":  "2026-05-07T20:27:48Z",
+                                                  "fim":  "2026-05-11T17:55:38Z",
+                                                  "minutos":  5608,
+                                                  "minutos_original":  5608,
+                                                  "minutos_na_semana":  4773,
+                                                  "atravessa_limite_semana":  true,
+                                                  "responsavel":  "10",
+                                                  "observacao":  "Pausado pela aplicação",
+                                                  "comentario_enviado":  true,
+                                                  "comentario_raw":  null,
+                                                  "comentarios":  [
+
+                                                                  ]
+                                              }
+                                          ],
+                         "comentarios_consolidados":  [
+
+                                                      ]
+                     }
+                 ],
+    "apontamentos_sem_demanda":  [
+
+                                 ]
+}

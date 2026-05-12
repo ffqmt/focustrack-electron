@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem -Path \"f:\\\\contaudi\\\\PycharmProjects\\\\FS\\\\focustrack-electron\" -Recurse -File | Where-Object { $_.FullName -notmatch 'node_modules' } | Select-Object FullName | Sort-Object FullName)",
+      "Bash(node --check \"f:/contaudi/PycharmProjects/FS/focustrack-electron/server.js\")",
+      "Bash(node --check server.js)",
+      "PowerShell(Get-Process -Name \"node\" -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowTitle -eq \"\" } | Stop-Process -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 1; Write-Output \"Processos node encerrados\")",
+      "Bash(Start-Sleep 3)",
+      "PowerShell($debug = Invoke-RestMethod \"http://localhost:3001/api/report/week/narrative?start=2026-05-04&debug=1\" -ErrorAction Stop; Write-Output \"=== SINAIS MANUAIS ===\"; $debug.dados_base.resumo_para_ia.sinais_manuais | ConvertTo-Json -Depth 5)",
+      "PowerShell($debug = Invoke-RestMethod \"http://localhost:3001/api/report/week/narrative?start=2026-05-04&debug=1\"; Write-Output \"=== BACKLOG EXECUTIVO ===\"; $debug.dados_base.resumo_para_ia.backlog_executivo | ConvertTo-Json -Depth 5)",
+      "PowerShell($debug = Invoke-RestMethod \"http://localhost:3001/api/report/week/narrative?start=2026-05-04&debug=1\"; Write-Output \"=== CARTEIRA EXECUTIVA ===\"; $debug.dados_base.resumo_para_ia.carteira_executiva | ConvertTo-Json -Depth 5; Write-Output \"=== TEMAS DA SEMANA ===\"; $debug.dados_base.resumo_para_ia.temas_da_semana | ConvertTo-Json -Depth 5)",
+      "PowerShell($debug = Invoke-RestMethod \"http://localhost:3001/api/report/week/narrative?start=2026-05-04&debug=1\"; Write-Output \"=== COMENTARIOS EXECUTIVOS \\(primeiros 3\\) ===\"; $debug.dados_base.resumo_para_ia.comentarios_executivos | Select-Object -First 3 | ConvertTo-Json -Depth 5; Write-Output \"=== TOTAL COMENTARIOS ===\"; $debug.dados_base.resumo_para_ia.comentarios_executivos.Count)",
+      "PowerShell($r = Invoke-RestMethod \"http://localhost:3001/api/report/week/email-html?start=2026-05-04\" -ErrorAction Stop; Write-Output \"ok: $\\($r.ok\\)\"; Write-Output \"html length: $\\($r.html.Length\\)\"; $r.html | Out-File \"f:\\\\contaudi\\\\PycharmProjects\\\\FS\\\\focustrack-electron\\\\test-email.html\" -Encoding utf8; Write-Output \"Arquivo salvo em test-email.html\")",
+      "PowerShell(Start-Process \"f:\\\\contaudi\\\\PycharmProjects\\\\FS\\\\focustrack-electron\\\\test-email.html\")",
+      "PowerShell($r = Invoke-RestMethod \"http://localhost:3001/api/report/week/email-html?start=2026-05-04&debug=1\" -ErrorAction Stop; Write-Output \"=== DEBUG narrativa \\(keys\\) ===\"; $r.dados_base.narrativa.PSObject.Properties.Name; Write-Output \"=== vitorias_da_semana ===\"; $r.dados_base.narrativa.vitorias_da_semana | ConvertTo-Json -Depth 3)",
+      "Bash(node --check \"f:\\\\contaudi\\\\PycharmProjects\\\\FS\\\\focustrack-electron\\\\widget.js\")",
+      "Bash(npm install *)",
+      "Bash(node --check scripts/send-weekly-report.js)",
+      "Bash(node -e \"require\\('./scripts/send-weekly-report.js'\\)\")",
+      "Bash(node scripts/send-weekly-report.js --dry-run --start=2026-05-04)",
+      "Bash(npm run *)"
+    ]
+  }
+}

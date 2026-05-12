@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demandas</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="app-shell popup-page">
+  <div class="popup-card">
+    <div class="popup-inner">
+      <header class="popup-header popup-drag">
+        <div class="popup-header-left">
+          <h1 class="popup-title">Demandas</h1>
+          <p class="popup-subtitle">Busque, selecione e acompanhe vários focos</p>
+        </div>
+
+        <div class="popup-header-actions no-drag">
+          <button
+            class="teams-icon-btn no-drag"
+            id="openTeamsBtn"
+            type="button"
+            title="Abrir demandas no Teams"
+            aria-label="Abrir demandas no Teams"
+          >
+            <svg
+              class="teams-icon"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <rect
+                x="8.5"
+                y="5.5"
+                width="10"
+                height="11"
+                rx="2.4"
+                class="teams-icon-shape teams-icon-back"
+              ></rect>
+
+              <rect
+                x="3.5"
+                y="7.5"
+                width="10"
+                height="10"
+                rx="2.2"
+                class="teams-icon-shape teams-icon-front"
+              ></rect>
+
+              <circle
+                cx="17.6"
+                cy="7.2"
+                r="2.2"
+                class="teams-icon-shape teams-icon-dot"
+              ></circle>
+
+              <path
+                d="M6.45 10.05H10.8V11.25H9.25V15H8V11.25H6.45V10.05Z"
+                class="teams-icon-letter"
+              ></path>
+            </svg>
+          </button>
+
+          <button
+            class="settings-btn no-drag"
+            id="settingsBtn"
+            type="button"
+            title="Configurações"
+            aria-label="Configurações"
+          >
+            ⚙
+          </button>
+        </div>
+      </header>
+
+      <section class="search-block">
+        <div class="search-bar no-drag">
+          <span class="search-icon">⌕</span>
+
+          <input
+            id="searchInput"
+            class="search-input"
+            type="text"
+            placeholder="Buscar chamado ou criar novo..."
+            autocomplete="off"
+          />
+
+          <button id="newTicketBtn" class="new-ticket-btn new-ticket-btn--inactive" type="button">
+            ＋ novo
+          </button>
+        </div>
+
+        <div id="searchResults" class="search-results hidden"></div>
+      </section>
+
+      <div class="divider"></div>
+
+      <section class="current-section">
+        <div class="current-meta-row">
+          <div class="current-status">
+            <span id="currentStatusDot" class="status-dot status-dot--waiting"></span>
+            <span id="currentStatusLabel" class="current-status-label">Nenhum chamado</span>
+          </div>
+
+          <span id="currentTime" class="current-time">00:00:00</span>
+        </div>
+
+        <div id="focusWorklist" class="focus-worklist">
+          <div class="focus-worklist-empty">
+            Nenhum chamado selecionado.
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer class="popup-footer">
+      <span>FocusTrack</span>
+      <span>esc para fechar</span>
+    </footer>
+  </div>
+
+  <div id="settingsModal" class="settings-modal hidden">
+    <div class="settings-backdrop" id="settingsBackdrop"></div>
+
+    <div class="settings-panel no-drag">
+      <div class="settings-header">
+        <div>
+          <h2 class="settings-title">Configurações</h2>
+          <p class="settings-subtitle">Informe apenas seu e-mail para validar a conexão</p>
+        </div>
+
+        <button id="closeSettingsBtn" class="settings-close-btn" type="button" aria-label="Fechar">
+          ×
+        </button>
+      </div>
+
+      <div class="settings-body">
+        <section class="settings-section">
+          <label class="settings-label" for="configUserEmail">E-mail do usuário</label>
+          <input
+            id="configUserEmail"
+            class="settings-input"
+            type="email"
+            placeholder="voce@empresa.com"
+            autocomplete="email"
+          />
+
+          <div id="settingsInlineStatus" class="settings-inline-status hidden"></div>
+        </section>
+      </div>
+
+      <div class="settings-footer">
+        <div class="settings-footer-right">
+          <button id="testSettingsBtn" class="settings-action-btn settings-action-btn--neutral" type="button">
+            Testar conexão
+          </button>
+
+          <button id="cancelSettingsBtn" class="settings-action-btn settings-action-btn--neutral" type="button">
+            Cancelar
+          </button>
+
+          <button id="saveSettingsBtn" class="settings-action-btn settings-action-btn--primary" type="button">
+            Salvar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="services/mock-db.js"></script>
+  <script src="services/tickets.js"></script>
+  <script src="services/flows.js"></script>
+  <script src="ui-feedback.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

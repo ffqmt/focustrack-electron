@@ -1,0 +1,107 @@
+name: Weekly FocusTrack Report
+
+on:
+  schedule:
+    # 05:53 America/Cuiaba (UTC-4) = 09:53 UTC  —  toda segunda-feira
+    # Dispara às 05:53 para o e-mail chegar ao destinatário por volta das 05:58
+    - cron: "53 9 * * 1"
+  workflow_dispatch:
+    inputs:
+      start:
+        description: "Data inicial do relatório (YYYY-MM-DD). Vazio = semana anterior automática."
+        required: false
+        type: string
+      to:
+        description: "Destinatário alternativo para teste (ex: dev@empresa.com.br)"
+        required: false
+        type: string
+      dry_run:
+        description: "Executar sem enviar e-mail (valida + salva HTML)"
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  send-report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Send weekly report
+        env:
+          # ── SharePoint / Microsoft Graph ──────────────────────
+          TENANT_ID: ${{ secrets.TENANT_ID }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          SHAREPOINT_SITE_URL: ${{ secrets.SHAREPOINT_SITE_URL }}
+          SHAREPOINT_TICKETS_LIST_ID: ${{ secrets.SHAREPOINT_TICKETS_LIST_ID }}
+          SHAREPOINT_TIME_ENTRIES_LIST_ID: ${{ secrets.SHAREPOINT_TIME_ENTRIES_LIST_ID }}
+          SHAREPOINT_USER_LOOKUP_MAP: ${{ secrets.SHAREPOINT_USER_LOOKUP_MAP }}
+          FOCUSTRACK_DEFAULT_USER_EMAIL: ${{ secrets.FOCUSTRACK_DEFAULT_USER_EMAIL }}
+          FOCUSTRACK_DEFAULT_USER_LOOKUP_ID: ${{ secrets.FOCUSTRACK_DEFAULT_USER_LOOKUP_ID }}
+          # ── AI narrative ──────────────────────────────────────
+          AI_API_BASE_URL: ${{ secrets.AI_API_BASE_URL }}
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
+          AI_MODEL: ${{ vars.AI_MODEL }}
+          AI_API_RESPONSE_FORMAT: json_object
+          # ── SMTP ──────────────────────────────────────────────
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ vars.SMTP_PORT }}
+          SMTP_SECURE: ${{ vars.SMTP_SECURE }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          # ── Report recipients ─────────────────────────────────
+          WEEKLY_REPORT_FROM: ${{ secrets.WEEKLY_REPORT_FROM }}
+          WEEKLY_REPORT_TO: ${{ secrets.WEEKLY_REPORT_TO }}
+          WEEKLY_REPORT_CC: ${{ vars.WEEKLY_REPORT_CC }}
+          WEEKLY_REPORT_BCC: ${{ vars.WEEKLY_REPORT_BCC }}
+          WEEKLY_REPORT_TIMEZONE: America/Cuiaba
+          WEEKLY_REPORT_BASE_URL: http://localhost:3001
+          # ── Optional SharePoint field overrides ───────────────
+          SP_FIELD_TIME_RESPONSIBLE_LOOKUP: ${{ vars.SP_FIELD_TIME_RESPONSIBLE_LOOKUP }}
+          SP_FIELD_TICKET_REQUESTER_LOOKUP: ${{ vars.SP_FIELD_TICKET_REQUESTER_LOOKUP }}
+          SP_FIELD_TICKET_CREATED_AT: ${{ vars.SP_FIELD_TICKET_CREATED_AT }}
+          SP_FIELD_TIME_CENTRAL_COMMENT: ${{ vars.SP_FIELD_TIME_CENTRAL_COMMENT }}
+          SP_FIELD_TIME_SEND_CENTRAL_COMMENT: ${{ vars.SP_FIELD_TIME_SEND_CENTRAL_COMMENT }}
+          SP_FIELD_TIME_CENTRAL_COMMENT_SENT: ${{ vars.SP_FIELD_TIME_CENTRAL_COMMENT_SENT }}
+          SP_FIELD_TIME_CENTRAL_COMMENT_ERROR: ${{ vars.SP_FIELD_TIME_CENTRAL_COMMENT_ERROR }}
+          SP_NATIVE_COMMENTS_ENABLED: "false"
+          PORT: "3001"
+          NODE_ENV: production
+        run: |
+          SCRIPT_ARGS=""
+
+          if [ -n "${{ github.event.inputs.start }}" ]; then
+            SCRIPT_ARGS="$SCRIPT_ARGS --start=${{ github.event.inputs.start }}"
+          fi
+
+          if [ -n "${{ github.event.inputs.to }}" ]; then
+            SCRIPT_ARGS="$SCRIPT_ARGS --to=${{ github.event.inputs.to }}"
+          fi
+
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            SCRIPT_ARGS="$SCRIPT_ARGS --dry-run"
+          fi
+
+          node scripts/send-weekly-report.js $SCRIPT_ARGS
+
+      - name: Upload HTML snapshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-report-html-${{ github.run_id }}
+          path: reports/email-html/
+          if-no-files-found: ignore
+          retention-days: 30
