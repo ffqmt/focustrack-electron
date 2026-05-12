@@ -3858,7 +3858,7 @@ function buildWeeklyReportEmailHtml({ meta, narrativa, resumoParaIa }) {
   const r = resumoParaIa || {};
 
   // ── constantes de URLs ──────────────────────────────────────
-  const TEAMS_LINK = 'https://teams.microsoft.com/l/entity/26bc2873-6023-480c-a11b-76b66605ce8c/_djb2_msteams_prefix_2810599455?context=%7B%22channelId%22%3A%2219%3A8m7ZGscFI8DiTnbcgxhzOc9_1aqEYMtlZtw6odWaShw1%40thread.tacv2%22%7D&tenantId=d2f6807c-d369-4371-93d4-16a3561f25f2';
+  const TEAMS_LINK = process.env.FOCUSTRACK_TEAMS_LINK || '';
   const LOGO_FRANCO = 'https://raw.githubusercontent.com/ffqmt/Images/15116cdbaa87af68eb9eaf9a1bea9ee7502bb9f7/FRANCO%20LOGO.png';
   const LOGO_CONTAUDI = 'https://raw.githubusercontent.com/ffqmt/Images/15116cdbaa87af68eb9eaf9a1bea9ee7502bb9f7/LOGO%20IMAGEM.png';
 

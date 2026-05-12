@@ -1,21 +1,34 @@
-# Dependências
-node_modules/
-
-# Variáveis de ambiente reais
+# Env / secrets
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
 
-# Electron build
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Electron/build
 dist/
+build/
 out/
 
-# Reports gerados (manter apenas .gitkeep)
+# Reports gerados
 reports/email-html/*.html
+relatorio-week-*.json
+
+# Claude Code (configurações locais de sessão)
+.claude/
+
+# IDE/Sistema
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Arquivos de teste gerados localmente
+test-email.html
 
 # Logs
 *.log
-server-output.log
-
-# Testes gerados
-test-email.html

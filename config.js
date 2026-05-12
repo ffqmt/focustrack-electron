@@ -10,17 +10,17 @@
     },
 
     sharePoint: {
-      siteUrl: 'https://contaudiassessoria.sharepoint.com/sites/TecnologiaContaudi',
+      siteUrl: '',
       lists: {
         tickets: 'Chamados',
         timeEntries: 'LancamentosTempo',
-        ticketsId: '21d2acbc-82d5-419c-b4a5-3a1a962a69f0',
-        timeEntriesId: 'e6a41895-5b9f-438b-9873-ddeaa3364fb8'
+        ticketsId: '',
+        timeEntriesId: ''
       }
     },
 
     links: {
-      teamsDemandsUrl: 'https://teams.microsoft.com/l/entity/26bc2873-6023-480c-a11b-76b66605ce8c/_djb2_msteams_prefix_2810599455?context=%7B%22channelId%22%3A%2219%3A8m7ZGscFI8DiTnbcgxhzOc9_1aqEYMtlZtw6odWaShw1%40thread.tacv2%22%7D&tenantId=d2f6807c-d369-4371-93d4-16a3561f25f2'
+      teamsDemandsUrl: ''
     }
 
   };
