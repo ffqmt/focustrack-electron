@@ -53,6 +53,7 @@ jobs:
           SHAREPOINT_USER_LOOKUP_MAP: ${{ secrets.SHAREPOINT_USER_LOOKUP_MAP }}
           FOCUSTRACK_DEFAULT_USER_EMAIL: ${{ secrets.FOCUSTRACK_DEFAULT_USER_EMAIL }}
           FOCUSTRACK_DEFAULT_USER_LOOKUP_ID: ${{ secrets.FOCUSTRACK_DEFAULT_USER_LOOKUP_ID }}
+          FOCUSTRACK_TEAMS_LINK: ${{ secrets.FOCUSTRACK_TEAMS_LINK }}
           # ── AI narrative ──────────────────────────────────────
           AI_API_BASE_URL: ${{ secrets.AI_API_BASE_URL }}
           AI_API_KEY: ${{ secrets.AI_API_KEY }}
