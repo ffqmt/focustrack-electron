@@ -1,11 +1,12 @@
 name: Weekly FocusTrack Report
 
 on:
-  push:
-    branches: [main]
-  # TESTE TEMPORÁRIO — dispara a cada 5 minutos para validar o gatilho schedule.
   schedule:
-    - cron: "*/5 * * * *"
+    # Segunda 00:10 em Cuiabá (UTC-4) = 04:10 UTC
+    - cron: "10 4 * * 1"
+    # Segunda 05:15 em Cuiabá (UTC-4) = 09:15 UTC
+    # Agendado antes de 05:59 para compensar possíveis atrasos do GitHub Actions
+    - cron: "15 9 * * 1"
   workflow_dispatch:
     inputs:
       start:
