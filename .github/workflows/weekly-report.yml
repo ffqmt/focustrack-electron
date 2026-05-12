@@ -1,6 +1,6 @@
 name: Weekly FocusTrack Report
 
-"on":
+on:
   # TESTE TEMPORÁRIO — dispara a cada 5 minutos para validar o gatilho schedule.
   schedule:
     - cron: "*/5 * * * *"
