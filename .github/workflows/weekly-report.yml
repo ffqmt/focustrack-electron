@@ -2,9 +2,9 @@ name: Weekly FocusTrack Report
 
 on:
   schedule:
-    # TESTE — 12/05/2026 às 14:35 UTC (= 10:35 America/Cuiaba)
+    # TESTE — 12/05/2026 às 15:05 UTC (= 11:05 America/Cuiaba)
     # Retornar para produção após teste: "58 9 * * 1"  (05:58 Cuiabá toda segunda)
-    - cron: "35 14 12 5 *"
+    - cron: "5 15 12 5 *"
   workflow_dispatch:
     inputs:
       start:
