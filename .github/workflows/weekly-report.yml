@@ -2,8 +2,8 @@ name: Weekly FocusTrack Report
 
 on:
   schedule:
-    # TESTE/Produção provisória — toda terça-feira às 18:10 UTC (= 14:10 America/Cuiaba)
-    - cron: "10 18 * * 2"
+    # TESTE imediato — terça-feira às 18:00 UTC (= 14:00 America/Cuiaba)
+    - cron: "0 18 * * 2"
   workflow_dispatch:
     inputs:
       start:
