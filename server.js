@@ -4070,7 +4070,7 @@ function buildWeeklyReportEmailHtml({ meta, narrativa, resumoParaIa }) {
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           ${renderMetricCell(totalApontamentos, 'Registros da semana', '#1a73be')}
-          ${renderMetricCell(totalConcluidas, 'Entregas conclu&iacute;das', '#2fbf88')}
+          ${renderMetricCell(totalConcluidas, 'Entregas concluídas', '#2fbf88')}
           ${renderMetricCell(totalAndamento, 'Frentes em andamento', '#0d2b4c')}
           ${renderMetricCell(totalBacklog, 'Backlog / triagem', '#f2b84b')}
         </tr>
