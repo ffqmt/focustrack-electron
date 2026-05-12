@@ -249,6 +249,53 @@ function sanitizeText(value) {
   return String(value || '').trim();
 }
 
+function ptbrDate(iso) {
+  if (!iso) return '';
+  const [y, m, d] = iso.split('-');
+  return `${d}/${m}/${y}`;
+}
+
+function getCentralCommentMaxChars() {
+  return Number(process.env.SP_CENTRAL_COMMENT_MAX_CHARS || 2000);
+}
+
+function getUserLookupMap() {
+  try {
+    return JSON.parse(process.env.SP_USER_LOOKUP_MAP || '{}');
+  } catch {
+    return {};
+  }
+}
+
+function getDefaultUserEmail() {
+  return process.env.SP_DEFAULT_USER_EMAIL || '';
+}
+
+function getDefaultUserLookupId() {
+  return Number(process.env.SP_DEFAULT_USER_LOOKUP_ID || 0);
+}
+
+function escapeHtml(text) {
+  const map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+  return String(text || '').replace(/[&<>"']/g, m => map[m]);
+}
+
+function renderMetricCell(label, value, color) {
+  return `
+<td width="25%" style="padding:0 6px 0 0;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:4px solid ${color};border:1px solid #d9e2ec;border-top:4px solid ${color};border-collapse:collapse;">
+    <tr><td style="padding:18px 16px 4px 16px;font-size:32px;font-weight:bold;color:#0d2b4c;font-family:Arial,sans-serif;line-height:1; text-align: center;">${value}</td></tr>
+    <tr><td style="padding:0 16px 16px 16px;font-size:10px;color:#6b7a90;font-family:Arial,sans-serif;letter-spacing:1px;text-transform:uppercase; text-align: center;">${label}</td></tr>
+  </table>
+</td>`;
+}
+
 function setDynamicField(fields, fieldName, value) {
   if (!fieldName) return;
   if (value === null || value === undefined || value === '') return;
@@ -278,22 +325,71 @@ function cleanWinTag(text) {
 function normalizeStatusLabel(status) {
   return String(status || '')
     .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
+    .replace(/[\u0300-\u036f]/g, '')
     .trim()
     .toLowerCase();
 }
 
 function isBacklogStatus(status) {
   const s = normalizeStatusLabel(status);
-  return s === 'novo' || s === 'em triagem' || s === 'triagem';
+  return [
+    'novo',
+    'triagem',
+    'em triagem',
+    'backlog',
+    'pendente',
+    'aguardando priorizacao',
+    'aguardando analise'
+  ].includes(s);
+}
+
+function isInProgressStatus(status) {
+  const s = normalizeStatusLabel(status);
+  return [
+    'em andamento',
+    'andamento',
+    'em execucao',
+    'executando',
+    'doing',
+    'in progress'
+  ].includes(s);
+}
+
+function isFinishedStatus(status) {
+  const s = normalizeStatusLabel(status);
+  return ['concluido', 'finalizado', 'done', 'finished'].includes(s);
 }
 
 // ── Tags manuais ────────────────────────────────────────────
-const MANUAL_SIGNAL_TAGS = ['WIN', 'RISCO', 'DECISAO', 'PROXIMO', 'IMPACTO', 'DOC', 'IA'];
+const REPORT_TAGS = {
+  DECISAO: ['#decisao', '#decisao_gestao', '#gestao'],
+  RISCO: ['#risco', '#atencao', '#alerta'],
+  DEPENDENCIA: ['#dependencia', '#bloqueio', '#aguardando'],
+  AUTOMACAO: ['#automacao', '#economia', '#bot', '#robo'],
+  URGENTE: ['#urgente', '#prioridade', '#critico']
+};
 
-function extractManualSignals(text) {
-  const raw = String(text || '');
-  return MANUAL_SIGNAL_TAGS.filter(tag => new RegExp(`#${tag}\\b`, 'i').test(raw));
+function extractTagsFromText(text) {
+  const raw = String(text || '').toLowerCase();
+  const found = {};
+  let economia = 0;
+
+  for (const [key, aliases] of Object.entries(REPORT_TAGS)) {
+    if (aliases.some(alias => raw.includes(alias))) {
+      found[key] = true;
+    }
+  }
+
+  // Parse #economia:4.5 or #economia 4.5h
+  const econMatch = raw.match(/#(?:economia|automacao)[:\s](\d+(?:\.\d+)?)(?:h\b)?/);
+  if (econMatch) {
+    economia = parseFloat(econMatch[1]);
+  }
+
+  return { 
+    tags: Object.keys(found),
+    economia
+  };
 }
 
 function cleanManualSignals(text) {
@@ -2663,10 +2759,9 @@ async function getWeeklyReportData(startStr) {
   }
 
   const [year, month, day] = startStr.split('-').map(Number);
-  // Segunda-feira 00:00 Cuiabá (UTC-4) = Segunda-feira 04:00 UTC
   const weekStartUtc = new Date(Date.UTC(year, month - 1, day, 4, 0, 0));
-  // Domingo 23:59:59 Cuiabá (UTC-4) = Segunda-feira 03:59:59 UTC
   const weekEndUtc = new Date(weekStartUtc.getTime() + (7 * 24 * 60 * 60 * 1000) - 1000);
+  const now = new Date();
 
   const siteId = await resolveSiteId();
   const config = getSharePointConfig();
@@ -2677,7 +2772,6 @@ async function getWeeklyReportData(startStr) {
     top: 999
   });
 
-  // Ordenar por Inicio crescente
   const sortedEntries = timeEntries.sort((a, b) => 
     new Date(a.fields?.Inicio).getTime() - new Date(b.fields?.Inicio).getTime()
   );
@@ -2690,7 +2784,6 @@ async function getWeeklyReportData(startStr) {
   sortedEntries.forEach(item => {
     const f = item.fields || {};
     const ticketId = getTicketIdFromTimeEntryFields(f);
-    
     const minutosOriginal = toSafeNumber(f.Minutos);
     const minutosNaSemana = calculateMinutesInRange(f.Inicio, f.Fim, weekStartUtc, weekEndUtc);
     const atravessaLimite = (new Date(f.Inicio).getTime() < weekStartUtc.getTime()) || 
@@ -2711,29 +2804,12 @@ async function getWeeklyReportData(startStr) {
       comentarios: parseComments(f[config.timeCentralCommentField])
     };
 
-    if (atravessaLimite) {
-      alertas.push({
-        tipo: 'apontamento_atravessa_semana',
-        demanda_id: ticketId ? String(ticketId) : null,
-        apontamento_id: entryData.id,
-        mensagem: `Apontamento #${entryData.id} atravessa o limite da semana (Original: ${minutosOriginal}min, Na Semana: ${minutosNaSemana}min).`
-      });
-    }
-
     if (ticketId) {
       ticketIds.add(String(ticketId));
-      if (!apontamentosPorDemanda[ticketId]) {
-        apontamentosPorDemanda[ticketId] = [];
-      }
+      if (!apontamentosPorDemanda[ticketId]) apontamentosPorDemanda[ticketId] = [];
       apontamentosPorDemanda[ticketId].push(entryData);
     } else {
       apontamentosSemDemanda.push(entryData);
-      alertas.push({
-        tipo: 'apontamento_sem_demanda',
-        demanda_id: null,
-        apontamento_id: entryData.id,
-        mensagem: `Apontamento #${entryData.id} não possui demanda vinculada.`
-      });
     }
   });
 
@@ -2747,11 +2823,13 @@ async function getWeeklyReportData(startStr) {
         titulo: tf.Title || '',
         status: tf.Status || '',
         tipo: tf.TipodeChamado || '',
-        departamento: tf.Departamento || '',
+        departamento: tf.Departamento || 'Sem departamento informado',
         origem: tf.Origem || '',
         descricao: tf.Descri_x00e7__x00e3_o || '',
         data_criacao: tf.DataCria_x00e7__x00e3_o || tf.Created || null,
-        data_conclusao: tf.DataConclus_x00e3_o || null,
+        data_conclusao: tf.DataConclus_x00e7__x00e3_o || null,
+        inicio_planejado: tf.InicioPlanejado || null,
+        fim_planejado: tf.FimPlanejado || null,
         tempo_total_historico_min: toSafeNumber(tf.TempoGasto),
         tempo_total_historico_horas: formatMinutesToHours(tf.TempoGasto)
       };
@@ -2761,269 +2839,148 @@ async function getWeeklyReportData(startStr) {
     }
   }
 
-  let countComentarioPendente = 0;
-  let countDemandaSemComentario = 0;
-
   const finalDemandas = Object.entries(apontamentosPorDemanda).map(([tid, entries]) => {
-    const demandaInfo = demandasMap[tid] || { id: tid };
-    const totalMinOriginal = entries.reduce((sum, e) => sum + e.minutos_original, 0);
+    const d = demandasMap[tid] || { id: tid };
     const totalMinSemana = entries.reduce((sum, e) => sum + e.minutos_na_semana, 0);
-    const temAtravessado = entries.some(e => e.atravessa_limite_semana);
+    const comentariosConsolidados = entries.flatMap(e => e.comentarios.map(c => c.texto));
     
-    // Flags de semana
-    const iniciadaNestaSemana = demandaInfo.data_criacao ? 
-      (new Date(demandaInfo.data_criacao) >= weekStartUtc && new Date(demandaInfo.data_criacao) <= weekEndUtc) : false;
-    const concluidaNestaSemana = demandaInfo.data_conclusao ? 
-      (new Date(demandaInfo.data_conclusao) >= weekStartUtc && new Date(demandaInfo.data_conclusao) <= weekEndUtc) : false;
+    // Status normalization
+    const normalizedStatus = normalizeStatusLabel(d.status);
+    const inProgress = isInProgressStatus(d.status);
+    const backlog = isBacklogStatus(d.status);
+    const finished = isFinishedStatus(d.status);
 
-    const temComentario = entries.some(e => e.comentario_raw);
-    if (!temComentario) {
-      countDemandaSemComentario++;
-      alertas.push({
-        tipo: 'demanda_sem_comentario',
-        demanda_id: String(tid),
-        apontamento_id: null,
-        mensagem: `Demanda #${tid} não possui comentários centrais em nenhum apontamento desta semana.`
-      });
+    // Date analysis
+    const concluidaNestaSemana = d.data_conclusao && 
+      (new Date(d.data_conclusao) >= weekStartUtc && new Date(d.data_conclusao) <= weekEndUtc);
+    const criadaNestaSemana = d.data_criacao && 
+      (new Date(d.data_criacao) >= weekStartUtc && new Date(d.data_criacao) <= weekEndUtc);
+
+    // Deadline analysis
+    const fimPlanejado = d.fim_planejado ? new Date(d.fim_planejado) : null;
+    const dataConclusao = d.data_conclusao ? new Date(d.data_conclusao) : null;
+    
+    let deadlineStatus = 'Sem prazo';
+    if (fimPlanejado) {
+      if (dataConclusao) {
+        deadlineStatus = dataConclusao <= fimPlanejado ? 'No prazo' : 'Com atraso';
+      } else {
+        deadlineStatus = fimPlanejado < now ? 'Atrasado' : 'No prazo (aberto)';
+      }
     }
 
-    entries.forEach(e => {
-      if (e.comentario_raw && !e.comentario_enviado) {
-        countComentarioPendente++;
-        alertas.push({
-          tipo: 'comentario_nao_confirmado',
-          demanda_id: String(tid),
-          apontamento_id: e.id,
-          mensagem: `Apontamento #${e.id} possui comentário pendente de envio.`
-        });
-      }
-    });
-
-    const comentariosConsolidados = [];
-    entries.forEach(e => {
-      e.comentarios.forEach(c => {
-        comentariosConsolidados.push(c);
-      });
-    });
+    // Tag analysis
+    const allText = `${d.titulo} ${d.descricao} ${comentariosConsolidados.join(' ')}`;
+    const { tags, economia } = extractTagsFromText(allText);
 
     return {
-      ...demandaInfo,
+      ...d,
+      tags,
+      economia_estimada: economia,
+      normalized_status: { in_progress: inProgress, backlog, finished },
+      deadline_status: deadlineStatus,
       semana: {
-        tempo_minutos_original: totalMinOriginal,
         tempo_minutos: totalMinSemana,
         tempo_horas: formatMinutesToHours(totalMinSemana),
-        quantidade_apontamentos: entries.length,
         concluida_nesta_semana: concluidaNestaSemana,
-        iniciada_nesta_semana: iniciadaNestaSemana,
-        tem_apontamento_atravessado: temAtravessado
+        criada_nesta_semana: criadaNestaSemana,
+        quantidade_apontamentos: entries.length
       },
-      apontamentos: entries,
-      comentarios_consolidados: comentariosConsolidados
+      comentarios_semana: comentariosConsolidados
     };
   });
 
-  const totalMinutosOriginais = sortedEntries.reduce((sum, item) => sum + toSafeNumber(item.fields?.Minutos), 0);
+  // Global metrics
   const totalMinutosSemana = finalDemandas.reduce((sum, d) => sum + d.semana.tempo_minutos, 0) + 
                              apontamentosSemDemanda.reduce((sum, e) => sum + e.minutos_na_semana, 0);
-
-  const [endYear, endMonth, endDate] = new Date(weekEndUtc.getTime() - (4 * 60 * 60 * 1000)).toISOString().split('T')[0].split('-').map(Number);
-  const labelFim = `${String(endDate).padStart(2, '0')}/${String(endMonth).padStart(2, '0')}/${endYear}`;
-  const [startYear, startMonth, startDay] = startStr.split('-').map(Number);
-  const labelInicio = `${String(startDay).padStart(2, '0')}/${String(startMonth).padStart(2, '0')}/${startYear}`;
-
-  const geradoEmBr = new Intl.DateTimeFormat('pt-BR', {
-    timeZone: 'America/Cuiaba',
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit'
-  }).format(new Date());
 
   const meta = {
     semana: {
       inicio: startStr,
       fim: new Date(weekEndUtc.getTime() - (4 * 60 * 60 * 1000)).toISOString().split('T')[0],
-      label: `Semana de ${labelInicio} a ${labelFim}`
+      label: `Semana de ${ptbrDate(startStr)} a ${ptbrDate(new Date(weekEndUtc.getTime() - (4 * 60 * 60 * 1000)).toISOString().split('T')[0])}`
     },
-    gerado_em: new Date().toISOString(),
-    gerado_em_br: geradoEmBr,
+    gerado_em_br: new Intl.DateTimeFormat('pt-BR', { timeZone: 'America/Cuiaba', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date()),
     total_demandas_tocadas: finalDemandas.length,
     total_apontamentos: sortedEntries.length,
-    total_minutos_originais_lancamentos: totalMinutosOriginais,
-    total_minutos_semana: totalMinutosSemana,
     total_horas_semana: formatMinutesToHours(totalMinutosSemana),
-    fonte: 'FocusTrack + SharePoint'
+    total_minutos_semana: totalMinutosSemana,
+    total_economia_horas: finalDemandas.reduce((sum, d) => sum + (d.economia_estimada || 0), 0)
   };
 
-  const metricas = {
-    demandas_sem_comentario: countDemandaSemComentario,
-    apontamentos_sem_demanda: apontamentosSemDemanda.length,
-    apontamentos_com_comentario_pendente: countComentarioPendente
-  };
-
-  const mapResumoDemanda = (d) => ({
-    id: d.id,
-    titulo: d.titulo,
-    status: d.status,
-    tipo: d.tipo,
-    departamento: d.departamento,
-    origem: d.origem,
-    tempo_horas: d.semana.tempo_horas,
-    tempo_minutos: d.semana.tempo_minutos,
-    quantidade_apontamentos: d.semana.quantidade_apontamentos,
-    concluida_nesta_semana: d.semana.concluida_nesta_semana,
-    iniciada_nesta_semana: d.semana.iniciada_nesta_semana,
-    comentarios: d.comentarios_consolidados.map(c => c.texto)
+  // Group by department
+  const deptoMap = {};
+  finalDemandas.forEach(d => {
+    const dep = d.departamento || 'Sem departamento informado';
+    if (!deptoMap[dep]) {
+      deptoMap[dep] = {
+        nome: dep,
+        total: 0,
+        em_andamento: 0,
+        backlog: 0,
+        concluidos_semana: 0,
+        atrasados: 0,
+        decisoes: 0,
+        riscos: 0,
+        demandas: []
+      };
+    }
+    const m = deptoMap[dep];
+    m.total++;
+    if (d.normalized_status.in_progress) m.em_andamento++;
+    if (d.normalized_status.backlog) m.backlog++;
+    if (d.semana.concluida_nesta_semana) m.concluidos_semana++;
+    if (d.deadline_status === 'Atrasado') m.atrasados++;
+    if (d.tags.includes('DECISAO')) m.decisoes++;
+    if (d.tags.includes('RISCO')) m.riscos++;
+    m.demandas.push(d.titulo);
   });
 
-  const concluidas = finalDemandas.filter(d => d.status === 'Concluído').map(mapResumoDemanda);
-  const emAndamento = finalDemandas.filter(d => d.status === 'Em andamento').map(mapResumoDemanda);
-  const outras = finalDemandas.filter(d => d.status !== 'Concluído' && d.status !== 'Em andamento').map(mapResumoDemanda);
+  const departamentos = Object.values(deptoMap);
 
-  const backlogExecutivo = finalDemandas
-    .filter(d => isBacklogStatus(d.status))
-    .map(d => {
-      const leituraBacklog = normalizeStatusLabel(d.status) === 'novo'
-        ? 'Demanda registrada, ainda sem triagem concluída. Deve ser avaliada para definição de prioridade, responsável e próximo passo.'
-        : 'Demanda em avaliação inicial. Requer definição de escopo, impacto e encaminhamento operacional.';
-      const comentsDemanda = d.comentarios_consolidados.map(c => c.texto);
-      return {
-        demanda_id: d.id,
-        titulo: d.titulo,
-        status: d.status,
-        origem: d.origem,
-        tempo_horas: d.semana.tempo_horas,
-        tempo_minutos: d.semana.tempo_minutos,
-        comentarios: comentsDemanda,
-        ultimo_comentario: comentsDemanda[comentsDemanda.length - 1] || '',
-        frente: inferManagementFront({ demanda: d, comentarios: comentsDemanda }),
-        leitura_executiva: leituraBacklog
-      };
-    });
-
+  // Resume for IA
   const resumoParaIa = {
     periodo: meta.semana.label,
     total_horas: meta.total_horas_semana,
-    total_minutos: meta.total_minutos_semana,
-    demandas_movimentadas: meta.total_demandas_tocadas,
-    total_apontamentos: meta.total_apontamentos,
-    demandas_por_status: {
-      concluidas,
-      em_andamento: emAndamento,
-      outras
+    total_economia_horas: meta.total_economia_horas,
+    total_demandas_movimentadas: meta.total_demandas_tocadas,
+    metricas_globais: {
+      em_andamento: finalDemandas.filter(d => d.normalized_status.in_progress).length,
+      backlog: finalDemandas.filter(d => d.normalized_status.backlog).length,
+      concluidos_na_semana: finalDemandas.filter(d => d.semana.concluida_nesta_semana).length,
+      criados_na_semana: finalDemandas.filter(d => d.semana.criada_nesta_semana).length,
+      atrasados: finalDemandas.filter(d => d.deadline_status === 'Atrasado').length,
+      concluidos_no_prazo: finalDemandas.filter(d => d.deadline_status === 'No prazo' && d.semana.concluida_nesta_semana).length,
+      concluidos_com_atraso: finalDemandas.filter(d => d.deadline_status === 'Com atraso' && d.semana.concluida_nesta_semana).length
     },
-    top_demandas_por_tempo: [...finalDemandas]
-      .sort((a, b) => b.semana.tempo_minutos - a.semana.tempo_minutos)
-      .slice(0, 10)
-      .map(mapResumoDemanda),
-    entregas_concluidas: concluidas,
-    demandas_em_andamento: emAndamento,
-    comentarios_relevantes: [],
-    comentarios_executivos: [],
-    pontos_de_atencao: [],
-    vitorias_sinalizadas: [],
-    backlog_executivo: backlogExecutivo,
-    sinais_manuais: { wins: [], riscos: [], decisoes: [], proximos: [], impactos: [], documentacao: [], ia: [] },
-    carteira_executiva: null,
-    temas_da_semana: [],
-    insights_operacionais: [],
-    base_narrativa: `Na ${meta.semana.label}, foram registradas ${meta.total_horas_semana} em ${meta.total_demandas_tocadas} demandas, distribuídas em ${meta.total_apontamentos} apontamentos. A semana registrou ${concluidas.length} demandas concluídas e ${emAndamento.length} em andamento, com destaque para as demandas de maior tempo registrado.`
+    departamentos,
+    blocos_tematicos: {
+      decisoes: finalDemandas.filter(d => d.tags.includes('DECISAO')).map(d => ({ titulo: d.titulo, descricao: d.comentarios_semana.find(c => c.toLowerCase().includes('#decisao')) || d.descricao, depto: d.departamento })),
+      riscos: finalDemandas.filter(d => d.tags.includes('RISCO') || d.deadline_status === 'Atrasado').map(d => ({ titulo: d.titulo, motivo: d.deadline_status === 'Atrasado' ? 'Prazo vencido' : 'Sinalizado como risco' })),
+      dependencias: finalDemandas.filter(d => d.tags.includes('DEPENDENCIA')).map(d => ({ titulo: d.titulo, descricao: d.comentarios_semana.find(c => c.toLowerCase().includes('#dependencia')) || 'Aguardando ação externa' })),
+      automacoes: finalDemandas.filter(d => d.tags.includes('AUTOMACAO')).map(d => ({ titulo: d.titulo, status: d.status })),
+    },
+    prazos: {
+      concluidos_no_prazo: finalDemandas.filter(d => d.deadline_status === 'No prazo' && d.semana.concluida_nesta_semana).length,
+      concluidos_com_atraso: finalDemandas.filter(d => d.deadline_status === 'Com atraso' && d.semana.concluida_nesta_semana).length,
+      em_aberto_atrasados: finalDemandas.filter(d => d.deadline_status === 'Atrasado').length,
+      em_aberto_no_prazo: finalDemandas.filter(d => d.deadline_status === 'No prazo (aberto)').length
+    },
+    demandas_detalhe: finalDemandas.map(d => ({
+      id: d.id,
+      titulo: d.titulo,
+      status: d.status,
+      depto: d.departamento,
+      tempo: d.semana.tempo_horas,
+      tags: d.tags,
+      prazo: d.deadline_status
+    }))
   };
-
-  const SINAL_CHAVE = { WIN: 'wins', RISCO: 'riscos', DECISAO: 'decisoes', PROXIMO: 'proximos', IMPACTO: 'impactos', DOC: 'documentacao', IA: 'ia' };
-
-  finalDemandas.forEach(d => {
-    d.apontamentos.forEach(a => {
-      a.comentarios.forEach(c => {
-        resumoParaIa.comentarios_relevantes.push({
-          demanda_id: d.id,
-          titulo: d.titulo,
-          horario: c.horario,
-          texto: c.texto
-        });
-
-        const classificado = classifyCommentForExecutiveReport({ comentario: c.texto, demanda: d });
-        resumoParaIa.comentarios_executivos.push({
-          ...classificado,
-          horario: c.horario,
-          tempo_horas: d.semana.tempo_horas,
-          tempo_minutos: d.semana.tempo_minutos
-        });
-
-        const sinalItem = {
-          demanda_id: d.id,
-          titulo: d.titulo,
-          status: d.status,
-          origem: d.origem,
-          texto_limpo: classificado.texto_limpo,
-          frente: classificado.frente,
-          leitura_executiva: classificado.leitura_executiva,
-          tempo_horas: d.semana.tempo_horas,
-          tempo_minutos: d.semana.tempo_minutos
-        };
-
-        classificado.sinais.forEach(tag => {
-          const chave = SINAL_CHAVE[tag];
-          if (chave) resumoParaIa.sinais_manuais[chave].push(sinalItem);
-        });
-
-        if (hasWinTag(c.texto)) {
-          resumoParaIa.vitorias_sinalizadas.push({
-            demanda_id: d.id,
-            titulo: d.titulo,
-            status: d.status,
-            tipo: d.tipo,
-            departamento: d.departamento,
-            origem: d.origem,
-            horario: c.horario,
-            texto: cleanWinTag(c.texto),
-            tempo_horas: d.semana.tempo_horas,
-            tempo_minutos: d.semana.tempo_minutos
-          });
-        }
-      });
-    });
-  });
-
-  resumoParaIa.carteira_executiva = buildExecutivePortfolio({
-    demandas: finalDemandas,
-    comentariosExecutivos: resumoParaIa.comentarios_executivos,
-    backlogExecutivo
-  });
-
-  resumoParaIa.temas_da_semana = buildWeeklyThemes({
-    resumoParaIa,
-    comentariosExecutivos: resumoParaIa.comentarios_executivos,
-    carteiraExecutiva: resumoParaIa.carteira_executiva
-  });
-
-  resumoParaIa.insights_operacionais = buildOperationalInsights({
-    resumoParaIa,
-    carteiraExecutiva: resumoParaIa.carteira_executiva
-  });
-
-  if (metricas.apontamentos_com_comentario_pendente > 0) {
-    resumoParaIa.pontos_de_atencao.push(`Existem ${metricas.apontamentos_com_comentario_pendente} apontamentos com comentário pendente de envio pelo Power Automate.`);
-  }
-  if (metricas.demandas_sem_comentario > 0) {
-    resumoParaIa.pontos_de_atencao.push(`Exist${metricas.demandas_sem_comentario > 1 ? 'em' : 'e'} ${metricas.demandas_sem_comentario} demanda${metricas.demandas_sem_comentario > 1 ? 's' : ''} sem comentário central nesta semana.`);
-  }
-  if (alertas.some(a => a.tipo === 'apontamento_atravessa_semana')) {
-    resumoParaIa.pontos_de_atencao.push("Existem apontamentos que atravessam o limite da semana; os minutos foram recortados para o período solicitado.");
-  }
-  if (metricas.apontamentos_sem_demanda > 0) {
-    resumoParaIa.pontos_de_atencao.push(`Existem ${metricas.apontamentos_sem_demanda} apontamentos sem demanda vinculada.`);
-  }
 
   return {
     meta,
-    metricas,
-    alertas,
     resumo_para_ia: resumoParaIa,
-    demandas: finalDemandas,
-    apontamentos_sem_demanda: apontamentosSemDemanda
+    demandas: finalDemandas
   };
 }
 
@@ -3053,135 +3010,65 @@ app.get('/api/report/week', async (req, res) => {
  */
 
 function buildWeeklyNarrativePrompt(resumoParaIa) {
-  const dadosCompactos = {
-    periodo: resumoParaIa.periodo,
-    total_horas: resumoParaIa.total_horas,
-    total_apontamentos: resumoParaIa.total_apontamentos,
-    demandas_movimentadas: resumoParaIa.demandas_movimentadas,
-    entregas_concluidas: resumoParaIa.entregas_concluidas,
-    demandas_em_andamento: resumoParaIa.demandas_em_andamento,
-    top_demandas_por_tempo: resumoParaIa.top_demandas_por_tempo,
-    vitorias_sinalizadas: resumoParaIa.vitorias_sinalizadas,
-    sinais_manuais: resumoParaIa.sinais_manuais,
-    backlog_executivo: resumoParaIa.backlog_executivo,
-    carteira_executiva: resumoParaIa.carteira_executiva,
-    temas_da_semana: resumoParaIa.temas_da_semana,
-    insights_operacionais: resumoParaIa.insights_operacionais,
-    comentarios_executivos: (resumoParaIa.comentarios_executivos || []).filter(c => c.peso_executivo >= 3),
-    pontos_de_atencao: resumoParaIa.pontos_de_atencao,
-    base_narrativa: resumoParaIa.base_narrativa
-  };
+  const r = resumoParaIa;
 
-  return `Você é um assistente executivo sênior especializado em relatórios de gestão operacional.
-Sua tarefa é gerar um relatório executivo semanal completo, baseado nos dados fornecidos em JSON.
+  return `Você é um assistente executivo sênior especializado em relatórios de gestão operacional para a Franco Sistemas / FocusTrack.
+Sua tarefa é gerar um relatório executivo semanal completo baseado EXCLUSIVAMENTE nos dados fornecidos abaixo.
 
-TOM E ESTILO:
-- Escreva para gestão, não para desenvolvedores.
-- Tom executivo, claro, confiante e objetivo.
-- Não liste tarefas de forma fria — interprete avanço, impacto, risco, decisão e continuidade.
-- Transforme comentários em narrativa de impacto.
-- Evite frases genéricas como "A equipe continua focada", "Próximos passos não definidos" ou "Resumo da produtividade".
-- Evite adjetivos exagerados (incrível, extraordinário, extraordinária).
+DIRETRIZES DE ESTILO:
+- Tom executivo, direto, profissional e focado em resultados/impacto.
+- Não use palavras vazias ou clichês corporativos (ex: "empenho total", "busca constante").
+- Transforme métricas em conclusões úteis (ex: em vez de "10 frentes", diga "A operação mantém 10 frentes simultâneas...").
 - Escreva em português brasileiro (PT-BR).
-- Não mencione "JSON", "IA", "modelo", "#WIN", "#RISCO" ou qualquer tag técnica no texto final.
+- Nunca mencione "JSON", "IA", "tags" ou o processo de geração.
 
-REGRAS CRÍTICAS:
-- Não invente demandas, horas, números ou nomes.
-- Use apenas os dados presentes no JSON fornecido.
-- Se uma demanda não tiver comentários, use título, status e tempo.
-- Cada seção deve ter função própria — não repita o mesmo tema em seções diferentes.
+REGRAS DE DADOS (CRÍTICO):
+- NÃO INVENTE NÚMEROS. Use exatamente o que está no JSON.
+- Se uma métrica for 0, mencione como um ponto de estabilidade ou ausência (ex: "Sem registros de atrasos na semana").
+- Use os departamentos para dar contexto geográfico/setorial ao trabalho.
+- DISTINÇÃO IMPORTANTE: Não misture Riscos com Dependências. 
+  - RISCOS: Ameaças ao prazo ou qualidade originadas no desenvolvimento ou ambiente.
+  - DEPENDÊNCIAS: Bloqueios externos, aguardando aprovação ou ação de terceiros/clientes.
 
-REGRAS DE VITÓRIAS:
-- 'sinais_manuais.wins' contém vitórias sinalizadas manualmente pelo operador — têm prioridade absoluta.
-- Se houver itens em 'sinais_manuais.wins', 'vitorias_da_semana' NÃO pode ficar vazio.
-- Vitória não é sinônimo de demanda concluída — uma demanda em andamento pode ter vitória parcial.
-- Trate vitórias de demandas em andamento como avanços relevantes, marcos parciais ou entregas intermediárias.
-
-REGRAS DE BACKLOG:
-- Backlog vem exclusivamente de 'backlog_executivo', que contém demandas com status Novo ou Em triagem.
-- Se 'backlog_executivo' estiver vazio, não invente backlog.
-- Não use tags para inferir backlog.
-
-REGRAS DE CARTEIRA:
-- Use 'carteira_executiva.por_frente' para compor 'carteira_por_frente'.
-- Use 'temas_da_semana' para compor 'projetos_interesse_gestao'.
-
-REGRAS DE RISCOS E DECISÕES:
-- 'sinais_manuais.riscos' e 'sinais_manuais.decisoes' alimentam 'pontos_de_atencao'.
-- 'sinais_manuais.proximos' alimenta 'proximos_passos_sugeridos'.
-
-FUNÇÃO DE CADA SEÇÃO:
-- resumo_executivo: visão geral executiva da semana
-- chamada_capa: frase de impacto para título do e-mail (até 15 palavras)
-- leitura_30s: 3 frases de leitura rápida para gestão
-- contexto_operacional: contexto do período — o que moldou a semana
-- vitorias_da_semana: avanços percebidos como relevantes (obrigatório se houver wins)
-- principais_entregas: demandas concluídas com contexto de valor
-- demandas_em_andamento: frentes em evolução, não apenas listagem
-- avancos_estruturais: melhorias de processo, sistema ou automação
-- carteira_por_frente: organização por natureza do trabalho
-- pontos_de_atencao: riscos, bloqueios e dependências
-- projetos_interesse_gestao: temas que merecem acompanhamento executivo
-- proximos_passos_sugeridos: ações concretas e prioritárias
-- fechamento_executivo: encerramento com sentido de avanço
-- texto_email: corpo curto de e-mail para encaminhar o relatório
-
-ESTRUTURA DE RETORNO (retorne exatamente estas chaves, sem adicionar nem remover):
+ESTRUTURA DO RELATÓRIO (Retorne em JSON):
 {
-  "resumo_executivo": "",
-  "chamada_capa": "",
+  "chamada_capa": "Frase curta e impactante (título do e-mail)",
+  "resumo_executivo": "Visão geral da semana em 2 parágrafos",
   "leitura_30s": {
-    "o_que_avancou": "",
-    "o_que_foi_entregue": "",
-    "o_que_exige_gestao": ""
+    "entrega_principal": "Destaque de conclusão",
+    "foco_operacional": "Onde o tempo foi mais investido",
+    "ponto_gestao": "Decisão ou risco que exige atenção"
   },
-  "contexto_operacional": { "titulo": "", "texto": "" },
-  "vitorias_da_semana": [{ "titulo": "", "descricao": "", "demanda_id": "", "origem": "" }],
-  "principais_entregas": [{ "titulo": "", "descricao": "", "demanda_id": "", "tempo": "" }],
-  "demandas_em_andamento": [{ "titulo": "", "descricao": "", "demanda_id": "", "tempo": "" }],
-  "avancos_estruturais": [{ "titulo": "", "descricao": "" }],
-  "carteira_por_frente": [{ "frente": "", "descricao": "" }],
+  "analise_por_departamento": "Narrativa sobre como as áreas se comportaram",
+  "vitorias_da_semana": [{ "titulo": "", "descricao": "" }],
+  "principais_entregas": [{ "titulo": "", "descricao": "", "tempo": "" }],
+  "demandas_em_andamento": [{ "titulo": "", "descricao": "", "tempo": "" }],
+  "decisoes_e_prazos": "Narrativa integrando as decisões tomadas e o status de cumprimento de prazos",
   "pontos_de_atencao": [{ "titulo": "", "descricao": "" }],
-  "projetos_interesse_gestao": [{ "frente": "", "status": "", "impacto": "", "proximo_passo": "" }],
-  "proximos_passos_sugeridos": [{ "titulo": "", "descricao": "" }],
-  "fechamento_executivo": "",
-  "texto_email": ""
+  "proximos_passos": [{ "titulo": "", "descricao": "" }],
+  "texto_email_curto": "Corpo de e-mail para encaminhamento do relatório"
 }
 
-DADOS PARA O RELATÓRIO:
-${JSON.stringify(dadosCompactos, null, 2)}`;
+DADOS DA SEMANA:
+${JSON.stringify(r, null, 2)}`;
 }
 
 function getAiConfig() {
   let baseUrl = process.env.AI_API_BASE_URL || 'https://api.openai.com/v1';
-  // Normalizar baseUrl para remover barra final
-  if (baseUrl.endsWith('/')) {
-    baseUrl = baseUrl.slice(0, -1);
-  }
-
-  const apiKey = process.env.AI_API_KEY || process.env.OPENAI_API_KEY;
-  const model = process.env.AI_MODEL || process.env.OPENAI_MODEL || 'gpt-4o-mini';
-  const responseFormat = process.env.AI_API_RESPONSE_FORMAT || 'json_object';
+  if (baseUrl.endsWith('/')) baseUrl = baseUrl.slice(0, -1);
 
   return {
     baseUrl,
-    apiKey,
-    model,
-    responseFormat
+    apiKey: process.env.AI_API_KEY || process.env.OPENAI_API_KEY,
+    model: process.env.AI_MODEL || process.env.OPENAI_MODEL || 'gpt-4o-mini',
+    responseFormat: process.env.AI_API_RESPONSE_FORMAT || 'json_object'
   };
 }
 
 async function generateWeeklyNarrative(resumoParaIa) {
   const config = getAiConfig();
-
-  if (!config.baseUrl) {
-    throw new Error('AI_API_BASE_URL não configurada para geração de narrativa semanal.');
-  }
-  if (!config.apiKey) {
-    throw new Error('AI_API_KEY não configurada para geração de narrativa semanal.');
-  }
-  if (!config.model) {
-    throw new Error('AI_MODEL não configurado para geração de narrativa semanal.');
+  if (!config.baseUrl || !config.apiKey) {
+    throw new Error('Configuração de IA incompleta (AI_API_BASE_URL/AI_API_KEY).');
   }
 
   const prompt = buildWeeklyNarrativePrompt(resumoParaIa);
@@ -3190,14 +3077,8 @@ async function generateWeeklyNarrative(resumoParaIa) {
   const payload = {
     model: config.model,
     messages: [
-      {
-        role: 'system',
-        content: 'Você é um assistente executivo especializado em transformar dados semanais de produtividade em narrativa clara, objetiva e profissional. Responda exclusivamente com JSON válido, sem markdown, sem bloco de código e sem texto fora do JSON.'
-      },
-      {
-        role: 'user',
-        content: prompt
-      }
+      { role: 'system', content: 'Responda exclusivamente com JSON válido conforme a estrutura solicitada.' },
+      { role: 'user', content: prompt }
     ],
     temperature: 0.2
   };
@@ -3217,126 +3098,25 @@ async function generateWeeklyNarrative(resumoParaIa) {
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    const err = new Error(`Erro na API de IA: ${response.status} - ${JSON.stringify(errorData)}`);
-    err.status = response.status;
-    err.details = errorData;
-    throw err;
+    throw new Error(`Erro na API de IA (${response.status}): ${JSON.stringify(errorData)}`);
   }
 
   const data = await response.json();
-  let content = data.choices?.[0]?.message?.content;
+  let content = data.choices?.[0]?.message?.content?.trim();
 
-  if (!content) {
-    const err = new Error('A API de IA retornou uma resposta sem conteúdo.');
-    err.details = data;
-    throw err;
-  }
+  if (!content) throw new Error('A API de IA retornou uma resposta sem conteúdo.');
 
-  // Limpeza robusta antes do parse
-  content = content.trim();
-  if (content.startsWith('```json')) {
-    content = content.replace(/^```json/, '').replace(/```$/, '').trim();
-  } else if (content.startsWith('```')) {
-    content = content.replace(/^```/, '').replace(/```$/, '').trim();
-  }
+  if (content.startsWith('```json')) content = content.replace(/^```json/, '').replace(/```$/, '').trim();
+  else if (content.startsWith('```')) content = content.replace(/^```/, '').replace(/```$/, '').trim();
 
   try {
-    const parsed = JSON.parse(content);
-    return normalizeNarrative(parsed, resumoParaIa);
+    return JSON.parse(content);
   } catch (err) {
     console.error('Erro ao fazer parse da resposta da IA:', content);
-    const parseErr = new Error('Resposta da IA não é um JSON válido.');
-    parseErr.details = content;
-    throw parseErr;
+    throw new Error('Resposta da IA não é um JSON válido.');
   }
 }
 
-function normalizeNarrative(raw, resumoParaIa) {
-  const toObjArray = (arr, fallbackKey) => {
-    if (!Array.isArray(arr)) return [];
-    return arr.map(item => {
-      if (typeof item === 'string') return { [fallbackKey]: item, descricao: '' };
-      return item;
-    });
-  };
-
-  const r = resumoParaIa || {};
-  const sinais = r.sinais_manuais || {};
-  const resumoExecutivo = raw.resumo_executivo || r.base_narrativa || '';
-
-  // ── vitórias ────────────────────────────────────────────────
-  const vitoriasIa = toObjArray(raw.vitorias_da_semana, 'titulo');
-  const idsIa = new Set(vitoriasIa.map(v => String(v.demanda_id || '')).filter(Boolean));
-  const vitoriasFallbackSinais = (sinais.wins || [])
-    .filter(v => !idsIa.has(String(v.demanda_id || '')))
-    .map(v => ({ titulo: v.titulo, descricao: v.texto_limpo || v.leitura_executiva, demanda_id: v.demanda_id, origem: v.origem }));
-  const vitoriasFallbackSinalizadas = (r.vitorias_sinalizadas || [])
-    .filter(v => !idsIa.has(String(v.demanda_id || '')) && !vitoriasFallbackSinais.some(s => String(s.demanda_id) === String(v.demanda_id)))
-    .map(v => ({ titulo: v.titulo, descricao: v.texto, demanda_id: v.demanda_id, origem: v.origem }));
-  const vitoriasFinais = [...vitoriasIa, ...vitoriasFallbackSinais, ...vitoriasFallbackSinalizadas];
-
-  // ── pontos de atenção ───────────────────────────────────────
-  let pontosIa = toObjArray(raw.pontos_de_atencao, 'titulo');
-  if (pontosIa.length === 0) {
-    pontosIa = [
-      ...(sinais.riscos || []).map(s => ({ titulo: s.titulo || 'Risco identificado', descricao: s.texto_limpo || s.leitura_executiva })),
-      ...(sinais.decisoes || []).map(s => ({ titulo: s.titulo || 'Decisão pendente', descricao: s.texto_limpo || s.leitura_executiva }))
-    ].slice(0, 6);
-  }
-
-  // ── próximos passos ─────────────────────────────────────────
-  let proximosIa = toObjArray(raw.proximos_passos_sugeridos, 'titulo');
-  if (proximosIa.length === 0) {
-    proximosIa = (sinais.proximos || [])
-      .map(s => ({ titulo: s.titulo || 'Próximo passo', descricao: s.texto_limpo || s.leitura_executiva }))
-      .slice(0, 6);
-  }
-
-  // ── carteira por frente ─────────────────────────────────────
-  let carteiraIa = toObjArray(raw.carteira_por_frente, 'frente');
-  if (carteiraIa.length === 0) {
-    carteiraIa = ((r.carteira_executiva || {}).por_frente || [])
-      .map(f => ({ frente: f.frente, descricao: f.leitura }))
-      .slice(0, 6);
-  }
-
-  // ── projetos de gestão ──────────────────────────────────────
-  let projetosIa = Array.isArray(raw.projetos_interesse_gestao) ? raw.projetos_interesse_gestao : [];
-  if (projetosIa.length === 0) {
-    projetosIa = (r.temas_da_semana || [])
-      .map(t => ({ frente: t.tema, status: 'Em acompanhamento', impacto: t.impacto_gestao, proximo_passo: t.evidencia }))
-      .slice(0, 5);
-  }
-
-  // ── leitura 30s ─────────────────────────────────────────────
-  const leitura30s = (raw.leitura_30s && typeof raw.leitura_30s === 'object') ? raw.leitura_30s : {};
-  const concluidas = r.entregas_concluidas || [];
-  const emAndamento = r.demandas_em_andamento || [];
-  const primeiroPonto = Array.isArray(r.pontos_de_atencao) && r.pontos_de_atencao.length ? String(r.pontos_de_atencao[0]) : '';
-
-  return {
-    resumo_executivo: resumoExecutivo,
-    chamada_capa: raw.chamada_capa || resumoExecutivo.split('.')[0].slice(0, 80),
-    leitura_30s: {
-      o_que_avancou: leitura30s.o_que_avancou || (emAndamento[0] ? `Avanço em ${emAndamento[0].titulo || emAndamento[0]}` : ''),
-      o_que_foi_entregue: leitura30s.o_que_foi_entregue || (concluidas[0] ? `Entregue: ${concluidas[0].titulo || concluidas[0]}` : ''),
-      o_que_exige_gestao: leitura30s.o_que_exige_gestao || primeiroPonto
-    },
-    contexto_operacional: (raw.contexto_operacional && typeof raw.contexto_operacional === 'object')
-      ? raw.contexto_operacional
-      : { titulo: 'Contexto da Semana', texto: resumoExecutivo },
-    vitorias_da_semana: vitoriasFinais,
-    principais_entregas: toObjArray(raw.principais_entregas, 'titulo'),
-    demandas_em_andamento: toObjArray(raw.demandas_em_andamento, 'titulo'),
-    avancos_estruturais: toObjArray(raw.avancos_estruturais, 'titulo'),
-    carteira_por_frente: carteiraIa,
-    pontos_de_atencao: pontosIa,
-    projetos_interesse_gestao: projetosIa,
-    proximos_passos_sugeridos: proximosIa,
-    fechamento_executivo: raw.fechamento_executivo || raw.texto_email || r.base_narrativa || '',
-    texto_email: raw.texto_email || raw.fechamento_executivo || ''
-  };
-}
 
 app.get('/api/report/week/narrative', async (req, res) => {
   try {
@@ -3505,726 +3285,241 @@ function renderProjectsTable(items) {
 </table>`;
 }
 
-function renderNextSteps(items) {
-  const arr = Array.isArray(items) ? items.slice(0, 6) : [];
-  if (arr.length === 0) return '';
-  const mid = Math.ceil(arr.length / 2);
-  const left = arr.slice(0, mid);
-  const right = arr.slice(mid);
-  const renderCol = (list, startIndex) => list.map((item, i) => {
-    const n = startIndex + i + 1;
-    const titulo = typeof item === 'string' ? item : (item.titulo || '');
-    const descricao = typeof item === 'string' ? '' : (item.descricao || '');
-    return `<tr>
-  <td style="padding:6px 0 6px 10px;border-left:3px solid #1a73be;font-family:Arial,sans-serif;vertical-align:top;">
-    <div style="font-size:13px;font-weight:700;color:#0d2b4c;">${n}. ${escapeHtml(titulo)}</div>
-    ${descricao ? `<div style="font-size:12px;color:#555;margin-top:2px;line-height:1.4;">${escapeHtml(descricao)}</div>` : ''}
-  </td>
-</tr>
-<tr><td style="height:6px;"></td></tr>`;
-  }).join('');
-  return `<table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr>
-    <td width="49%" style="vertical-align:top;padding-right:10px;">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">${renderCol(left, 0)}</table>
+function escapeHtml(text) {
+  if (typeof text !== 'string') return '';
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function renderMetricCell(value, label, color) {
+  return `
+    <td width="24%" style="vertical-align:top;padding:15px;background:#f7f9fc;border-bottom:3px solid ${color};">
+      <div style="font-size:22px;font-weight:bold;color:${color};font-family:Arial,sans-serif;">${value}</div>
+      <div style="font-size:10px;color:#6b7a90;text-transform:uppercase;letter-spacing:1px;margin-top:4px;font-family:Arial,sans-serif;">${label}</div>
     </td>
-    <td width="2%"></td>
-    <td width="49%" style="vertical-align:top;">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">${renderCol(right, mid)}</table>
-    </td>
-  </tr>
-</table>`;
+    <td width="1%"></td>
+  `;
 }
 
-function buildExecutiveCoverText({ meta, narrativa, resumoParaIa }) {
-  const n = narrativa || {};
-  const r = resumoParaIa || {};
-
-  const candidato = n.chamada_capa || n.resumo_executivo || '';
-  if (!isWeakText(candidato)) return candidato;
-
-  const total = r.total_horas || meta.total_horas_semana || '';
-  const apontamentos = r.total_apontamentos || meta.total_apontamentos || 0;
-  const movimentadas = r.demandas_movimentadas || meta.total_demandas_tocadas || 0;
-  const concluidas = (r.entregas_concluidas || r.demandas_por_status?.concluidas || []).length;
-  const andamento = (r.demandas_em_andamento || r.demandas_por_status?.em_andamento || []).length;
-  const wins = (r.vitorias_sinalizadas || []).length;
-  const topDemanda = (r.top_demandas_por_tempo || [])[0];
-
-  let partes = [];
-  partes.push(
-    `Semana com ${apontamentos} registros distribuídos em ${movimentadas} demandas` +
-    (total ? `, totalizando ${total} de trabalho registrado` : '') + '.'
-  );
-  if (concluidas > 0 || andamento > 0) {
-    const c = concluidas > 0 ? `${concluidas} entrega${concluidas > 1 ? 's concluídas' : ' concluída'}` : '';
-    const a = andamento > 0 ? `${andamento} frente${andamento > 1 ? 's' : ''} em andamento` : '';
-    partes.push(`O período combinou ${[c, a].filter(Boolean).join(' e ')}.`);
-  }
-  if (wins > 0) {
-    partes.push(`${wins > 1 ? `${wins} vitórias foram` : 'Uma vitória foi'} sinalizadas pela equipe ao longo da semana.`);
-  }
-  if (topDemanda) {
-    partes.push(`Destaque para a demanda "${topDemanda.titulo}" como principal frente em tempo registrado no período.`);
-  }
-  return partes.join(' ');
-}
-
-function buildManagementReading({ narrativa, resumoParaIa }) {
-  const n = narrativa || {};
-  const r = resumoParaIa || {};
-
-  const leitura = n.leitura_30s || {};
-  const avancou = leitura.o_que_avancou || '';
-  const entregue = leitura.o_que_foi_entregue || '';
-
-  if (!isWeakText(avancou, 40) || !isWeakText(entregue, 40)) {
-    return '';
-  }
-
-  const andamento = (r.demandas_em_andamento || r.demandas_por_status?.em_andamento || []);
-  const comentariosRel = (r.comentarios_relevantes || []);
-  const topDemanda = (r.top_demandas_por_tempo || [])[0];
-
-  let texto = 'A semana combinou sustentação operacional e avanço em frentes estratégicas.';
-  if (andamento.length > 0) {
-    texto += ` A carteira ativa conta com ${andamento.length} frente${andamento.length > 1 ? 's' : ''} em desenvolvimento.`;
-  }
-  if (comentariosRel.length > 0) {
-    texto += ' Os registros mostram atividade detalhada com comentários ao longo dos apontamentos.';
-  }
-  if (topDemanda) {
-    texto += ` A demanda de maior tempo registrado foi "${topDemanda.titulo}".`;
-  }
-  return texto;
-}
-
-function buildStructuralAdvances({ narrativa, resumoParaIa }) {
-  const n = narrativa || {};
-  const r = resumoParaIa || {};
-
-  const existentes = Array.isArray(n.avancos_estruturais) ? n.avancos_estruturais : [];
-  if (existentes.length >= 2) return existentes.slice(0, 4);
-
-  const result = [...existentes];
-  const seen = new Set(existentes.map(e => (e.titulo || '').toLowerCase()));
-
-  const add = (titulo, descricao) => {
-    if (result.length >= 4) return;
-    if (seen.has(titulo.toLowerCase())) return;
-    seen.add(titulo.toLowerCase());
-    result.push({ titulo, descricao });
-  };
-
-  (r.vitorias_sinalizadas || []).slice(0, 2).forEach(v => {
-    add(v.titulo || 'Marco relevante', v.texto || 'Avanço sinalizado manualmente pela equipe operacional.');
-  });
-
-  const comentarios = (r.comentarios_relevantes || []);
-  const longos = comentarios.filter(c => (c.texto || '').length > 60);
-  if (longos.length > 0) {
-    add('Detalhamento operacional', 'Registros com comentários extensos indicam envolvimento técnico relevante no período.');
-  }
-
-  const top = (r.top_demandas_por_tempo || []).slice(0, 2);
-  top.forEach(d => {
-    add(d.titulo || 'Frente de destaque', `Demanda com maior tempo registrado na semana (${d.tempo_horas || ''}).`);
-  });
-
-  return result;
-}
-
-function buildPortfolioByFront({ resumoParaIa }) {
-  const r = resumoParaIa || {};
-  const n = r.narrativa || {};
-
-  const existentes = Array.isArray(n && n.carteira_por_frente) ? n.carteira_por_frente : [];
-  if (existentes.length >= 2) return existentes.slice(0, 6);
-
-  const demandas = [
-    ...(r.demandas_em_andamento || r.demandas_por_status?.em_andamento || []),
-    ...(r.demandas_por_status?.outras || [])
-  ];
-
-  const frentes = {
-    'Automação, IA e dados': [],
-    'Fiscal e integrações': [],
-    'Infraestrutura e suporte': [],
-    'Microsoft 365, acessos e rede': [],
-    'Backlog / replanejamento': []
-  };
-
-  const keywords = {
-    'Automação, IA e dados': /automaç|ia\b|ocr|pdf|extrat|dados|robô|bot|python|script/i,
-    'Fiscal e integrações': /fiscal|nfse|nfe|sped|irpf|ecd|xml|nota|tribut|api/i,
-    'Infraestrutura e suporte': /servidor|acesso|senha|bloqueio|vpn|rede|suporte|infraestrut/i,
-    'Microsoft 365, acessos e rede': /teams|sharepoint|outlook|365|office|onedrive|exchange/i
-  };
-
-  demandas.forEach(d => {
-    const titulo = String(d.titulo || '').toLowerCase();
-    let colocado = false;
-    for (const [frente, re] of Object.entries(keywords)) {
-      if (re.test(titulo)) {
-        frentes[frente].push(d.titulo);
-        colocado = true;
-        break;
-      }
-    }
-    if (!colocado) frentes['Backlog / replanejamento'].push(d.titulo);
-  });
-
-  return Object.entries(frentes)
-    .filter(([, arr]) => arr.length > 0)
-    .slice(0, 6)
-    .map(([frente, arr]) => ({
-      frente,
-      descricao: arr.slice(0, 3).join(', ') + (arr.length > 3 ? ` e mais ${arr.length - 3}` : '') + '.'
-    }));
-}
-
-function buildManagementProjects({ narrativa, resumoParaIa }) {
-  const n = narrativa || {};
-  const r = resumoParaIa || {};
-
-  const existentes = Array.isArray(n.projetos_interesse_gestao) ? n.projetos_interesse_gestao : [];
-  if (existentes.length >= 2) return existentes.slice(0, 6);
-
-  const result = [...existentes];
-  const seen = new Set(existentes.map(e => (e.frente || '').toLowerCase()));
-
-  const add = (frente, status, impacto, proximo_passo) => {
-    if (result.length >= 6) return;
-    if (seen.has(frente.toLowerCase())) return;
-    seen.add(frente.toLowerCase());
-    result.push({ frente, status, impacto, proximo_passo });
-  };
-
-  const top = (r.top_demandas_por_tempo || []).slice(0, 3);
-  top.forEach(d => {
-    const status = d.status || 'Em andamento';
-    add(d.titulo || 'Demanda principal', status, `${d.tempo_horas || ''} registradas no período`, 'Acompanhar evolução e validar entregas parciais.');
-  });
-
-  (r.vitorias_sinalizadas || []).slice(0, 2).forEach(v => {
-    add(v.titulo || 'Frente com vitória', v.status || 'Em andamento', 'Vitória sinalizada pela equipe', 'Documentar resultado e avaliar replicabilidade.');
-  });
-
-  const andamento = (r.demandas_em_andamento || r.demandas_por_status?.em_andamento || []).slice(0, 2);
-  andamento.forEach(d => {
-    add(d.titulo || 'Frente em andamento', 'Em andamento', 'Frente ativa com impacto operacional direto', 'Acompanhar progresso e garantir continuidade.');
-  });
-
-  return result;
-}
-
-function buildNextStepsFallback({ narrativa, resumoParaIa }) {
-  const n = narrativa || {};
-  const r = resumoParaIa || {};
-
-  const existentes = Array.isArray(n.proximos_passos_sugeridos) ? n.proximos_passos_sugeridos : [];
-  if (existentes.length >= 2) return existentes.slice(0, 6);
-
-  const result = [...existentes];
-  const seen = new Set(existentes.map(e => (e.titulo || '').toLowerCase()));
-
-  const add = (titulo, descricao) => {
-    if (result.length >= 6) return;
-    if (seen.has(titulo.toLowerCase())) return;
-    seen.add(titulo.toLowerCase());
-    result.push({ titulo, descricao });
-  };
-
-  const andamento = (r.demandas_em_andamento || r.demandas_por_status?.em_andamento || []);
-  if (andamento.length > 0) {
-    add('Acompanhar demandas em andamento', `Monitorar evolução das ${andamento.length} frente${andamento.length > 1 ? 's' : ''} ativas e garantir continuidade.`);
-  }
-
-  const wins = (r.vitorias_sinalizadas || []);
-  if (wins.length > 0) {
-    add('Consolidar vitórias registradas', 'Documentar os resultados sinalizados com #WIN e avaliar replicabilidade nas demais frentes.');
-  }
-
-  const concluidas = (r.entregas_concluidas || r.demandas_por_status?.concluidas || []);
-  if (concluidas.length > 0) {
-    add('Revisar entregas concluídas', 'Validar qualidade e registrar aprendizados das demandas encerradas no período.');
-  }
-
-  const top = (r.top_demandas_por_tempo || [])[0];
-  if (top) {
-    add(`Monitorar: ${top.titulo}`, 'Demanda com maior tempo registrado — acompanhar status e avaliar necessidade de repriorizacão.');
-  }
-
-  const outras = (r.demandas_por_status?.outras || []);
-  if (outras.length > 0) {
-    add('Organizar backlog', `Revisar as ${outras.length} demanda${outras.length > 1 ? 's' : ''} no backlog e definir prioridade para a próxima semana.`);
-  }
-
-  add('Atualizar registro de atividades', 'Garantir que todos os apontamentos da semana estejam documentados e com comentários atualizados.');
-
-  return result;
-}
-
-function buildExecutiveClosing({ narrativa, resumoParaIa }) {
-  const n = narrativa || {};
-  const r = resumoParaIa || {};
-
-  const candidato = n.fechamento_executivo || n.texto_email || '';
-  if (!isWeakText(candidato)) return candidato;
-
-  const concluidas = (r.entregas_concluidas || r.demandas_por_status?.concluidas || []).length;
-  const andamento = (r.demandas_em_andamento || r.demandas_por_status?.em_andamento || []).length;
-  const total = r.total_horas || '';
-  const wins = (r.vitorias_sinalizadas || []).length;
-
-  let partes = [];
-  if (concluidas > 0 || andamento > 0) {
-    const c = concluidas > 0 ? `${concluidas} entrega${concluidas > 1 ? 's' : ''} concluída${concluidas > 1 ? 's' : ''}` : '';
-    const a = andamento > 0 ? `${andamento} frente${andamento > 1 ? 's' : ''} em andamento` : '';
-    partes.push(`A semana encerra com ${[c, a].filter(Boolean).join(' e ')}` + (total ? `, totalizando ${total} de esforço registrado` : '') + '.');
-  }
-  if (wins > 0) {
-    partes.push(`${wins > 1 ? `${wins} vitórias foram sinalizadas` : 'Uma vitória foi sinalizada'} pela operação, evidenciando entregas de valor além do registro técnico.`);
-  }
-  partes.push('O registro contínuo sustenta o acompanhamento gerencial e a rastreabilidade das atividades da equipe.');
-  return partes.join(' ');
-}
-
-function buildEnrichedDeliveries({ narrativa, resumoParaIa }) {
-  const n = narrativa || {};
-  const r = resumoParaIa || {};
-
-  const iaItems = Array.isArray(n.principais_entregas) ? n.principais_entregas : [];
-  const seen = new Set();
-  const result = [];
-
-  const push = (item) => {
-    if (result.length >= 9) return;
-    const key = (item.demanda_id ? String(item.demanda_id) : '') || (item.titulo || '').toLowerCase().slice(0, 30);
-    if (!key || seen.has(key)) return;
-    seen.add(key);
-    result.push(item);
-  };
-
-  iaItems.forEach(push);
-
-  (r.entregas_concluidas || r.demandas_por_status?.concluidas || []).forEach(d => {
-    const descFallback =
-      d.departamento === 'Fiscal' ? 'Entrega concluída com impacto na frente Fiscal, removendo pendência operacional do período.' :
-      d.origem === 'Chat Teams' ? 'Atendimento originado no Teams, com resolução direta da necessidade do usuário.' :
-      d.tipo === 'Chamado' ? 'Chamado concluído no período, contribuindo para a sustentação operacional e continuidade dos serviços.' :
-      'Demanda encerrada no período, com registro de conclusão no FocusTrack.';
-    push({ titulo: d.titulo, descricao: d.comentarios?.length ? d.comentarios[0] : descFallback, demanda_id: d.id, tempo: d.tempo_horas });
-  });
-
-  return result;
-}
-
-function buildEnrichedInProgress({ narrativa, resumoParaIa }) {
-  const n = narrativa || {};
-  const r = resumoParaIa || {};
-
-  const iaItems = Array.isArray(n.demandas_em_andamento) ? n.demandas_em_andamento : [];
-  const winsById = new Set((r.vitorias_sinalizadas || []).map(v => String(v.demanda_id || '')).filter(Boolean));
-  const seen = new Set();
-  const result = [];
-
-  const push = (item) => {
-    if (result.length >= 8) return;
-    const key = (item.demanda_id ? String(item.demanda_id) : '') || (item.titulo || '').toLowerCase().slice(0, 30);
-    if (!key || seen.has(key)) return;
-    seen.add(key);
-    result.push(item);
-  };
-
-  iaItems.forEach(push);
-
-  (r.demandas_em_andamento || r.demandas_por_status?.em_andamento || []).forEach(d => {
-    const temWin = winsById.has(String(d.id || ''));
-    const temComentarios = Array.isArray(d.comentarios) && d.comentarios.length > 1;
-    const descFallback = temWin
-      ? 'Frente em andamento com vitória parcial já sinalizada no período. Evolução relevante registrada.'
-      : temComentarios
-        ? 'Demanda com detalhamento extenso nos registros — evolução e acompanhamento ativos no período.'
-        : 'Demanda em progresso com apontamentos registrados na semana.';
-    push({ titulo: d.titulo, descricao: descFallback, demanda_id: d.id, tempo: d.tempo_horas });
-  });
-
-  return result;
+function formatPeriodForEmail(meta) {
+  if (!meta.inicio || !meta.fim) return 'Período não definido';
+  const i = new Date(meta.inicio);
+  const f = new Date(meta.fim);
+  const d = (date) => date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+  return `${d(i)} a ${d(f)}`;
 }
 
 function buildWeeklyReportEmailHtml({ meta, narrativa, resumoParaIa }) {
   const n = narrativa || {};
   const r = resumoParaIa || {};
+  const g = r.metricas_globais || {};
 
-  // ── constantes de URLs ──────────────────────────────────────
   const TEAMS_LINK = process.env.FOCUSTRACK_TEAMS_LINK || '';
   const LOGO_FRANCO = 'https://raw.githubusercontent.com/ffqmt/Images/15116cdbaa87af68eb9eaf9a1bea9ee7502bb9f7/FRANCO%20LOGO.png';
   const LOGO_CONTAUDI = 'https://raw.githubusercontent.com/ffqmt/Images/15116cdbaa87af68eb9eaf9a1bea9ee7502bb9f7/LOGO%20IMAGEM.png';
 
-  // ── conteúdo enriquecido ────────────────────────────────────
-  const capaTexto = escapeHtml(buildExecutiveCoverText({ meta, narrativa, resumoParaIa }));
-  const leituraGestao = escapeHtml(buildManagementReading({ narrativa, resumoParaIa }));
-  const fechamentoTexto = escapeHtml(buildExecutiveClosing({ narrativa, resumoParaIa }));
-
-  // ── vitórias: IA > sinais_manuais.wins > vitorias_sinalizadas ──
-  const vitoriasArr = (() => {
-    const ia = Array.isArray(n.vitorias_da_semana) ? n.vitorias_da_semana : [];
-    if (ia.length) return ia;
-    const wins = (r.sinais_manuais?.wins || []).map(v => ({ titulo: v.titulo, descricao: v.texto_limpo || v.leitura_executiva, demanda_id: v.demanda_id, origem: v.origem }));
-    if (wins.length) return wins;
-    return (r.vitorias_sinalizadas || []).map(v => ({ titulo: v.titulo, descricao: v.texto, demanda_id: v.demanda_id, origem: v.origem }));
-  })();
-
-  // ── carteira: IA > carteira_executiva.por_frente > buildPortfolioByFront ──
-  const carteiraArr = (() => {
-    const ia = Array.isArray(n.carteira_por_frente) ? n.carteira_por_frente : [];
-    if (ia.length) return ia;
-    const exec = ((r.carteira_executiva || {}).por_frente || []).map(f => ({ frente: f.frente, descricao: f.leitura }));
-    if (exec.length) return exec;
-    return buildPortfolioByFront({ resumoParaIa });
-  })();
-
-  // ── pontos de atenção: IA > sinais riscos/decisoes ─────────
-  const pontosAtencaoArr = (() => {
-    const ia = Array.isArray(n.pontos_de_atencao) ? n.pontos_de_atencao : [];
-    if (ia.length) return ia;
-    return [
-      ...(r.sinais_manuais?.riscos || []).map(s => ({ titulo: s.titulo || 'Risco identificado', descricao: s.texto_limpo || s.leitura_executiva })),
-      ...(r.sinais_manuais?.decisoes || []).map(s => ({ titulo: s.titulo || 'Decisão pendente', descricao: s.texto_limpo || s.leitura_executiva }))
-    ].slice(0, 6);
-  })();
-
-  // ── próximos passos: IA > sinais.proximos > buildNextStepsFallback ──
-  const proximosArr = (() => {
-    const ia = Array.isArray(n.proximos_passos_sugeridos) ? n.proximos_passos_sugeridos : [];
-    if (ia.length) return ia;
-    const prox = (r.sinais_manuais?.proximos || []).map(s => ({ titulo: s.titulo || 'Próximo passo', descricao: s.texto_limpo || s.leitura_executiva }));
-    if (prox.length) return prox;
-    return buildNextStepsFallback({ narrativa, resumoParaIa });
-  })();
-
-  // ── projetos de gestão: IA > temas_da_semana > buildManagementProjects ──
-  const projetosArr = (() => {
-    const ia = Array.isArray(n.projetos_interesse_gestao) ? n.projetos_interesse_gestao : [];
-    if (ia.length) return ia;
-    const temas = (r.temas_da_semana || []).map(t => ({ frente: t.tema, status: 'Em acompanhamento', impacto: t.impacto_gestao, proximo_passo: t.evidencia }));
-    if (temas.length) return temas;
-    return buildManagementProjects({ narrativa, resumoParaIa });
-  })();
-
-  const avancosArr = buildStructuralAdvances({ narrativa, resumoParaIa });
-  const entregasArr = buildEnrichedDeliveries({ narrativa, resumoParaIa });
-  const andamentoArr = buildEnrichedInProgress({ narrativa, resumoParaIa });
-
-  // ── renderização ────────────────────────────────────────────
-  const vitoriasHtml = renderVictoryItems(vitoriasArr);
-  const entregasHtml = renderEmailItems(entregasArr, { limit: 9, borderColor: '#2fbf88', titleColor: '#0d4a2e' });
-  const andamentoHtml = renderEmailItems(andamentoArr, { limit: 8, borderColor: '#1a73be', titleColor: '#0d2b4c' });
-  const avancosHtml = renderEmailItems(avancosArr, { limit: 4, borderColor: '#0d2b4c', titleColor: '#0d2b4c' });
-  const carteiraHtml = renderEmailItems(carteiraArr, { limit: 6, borderColor: '#1a73be', titleColor: '#0d2b4c' });
-  const atencaoHtml = renderAttentionItems(pontosAtencaoArr);
-  const projetosHtml = renderProjectsTable(projetosArr);
-  const proximosHtml = renderNextSteps(proximosArr);
-
-  // ── métricas ────────────────────────────────────────────────
-  const totalApontamentos = String(meta.total_apontamentos || r.total_apontamentos || 0);
-  const totalConcluidas = String((r.entregas_concluidas || r.demandas_por_status?.concluidas || []).length);
-  const totalAndamento = String((r.demandas_em_andamento || r.demandas_por_status?.em_andamento || []).length);
-  const totalBacklog = String(
-    Array.isArray(r.backlog_executivo) && r.backlog_executivo.length > 0
-      ? r.backlog_executivo.length
-      : (r.demandas_por_status?.outras || []).length
-  );
-
-  // ── leitura 30s ─────────────────────────────────────────────
-  const l30 = n.leitura_30s || {};
-  const l30avancou = escapeHtml(l30.o_que_avancou || '');
-  const l30entregue = escapeHtml(l30.o_que_foi_entregue || '');
-  const l30gestao = escapeHtml(l30.o_que_exige_gestao || '');
-
-  // ── textos de cabeçalho ─────────────────────────────────────
-  const periodo = formatPeriodForEmail(meta);
-  const geradoEm = escapeHtml(meta.gerado_em_br || '');
-  const semanaLabel = escapeHtml(meta.semana?.label || r.periodo || '');
-  const contextoTitulo = escapeHtml(n.contexto_operacional?.titulo || 'Contexto operacional da semana');
-  const contextoTexto = escapeHtml(n.contexto_operacional?.texto || r.base_narrativa || '');
-
-  // ── flags de visibilidade ───────────────────────────────────
-  const showVitorias = vitoriasArr.length > 0;
-  const showAvancos = avancosArr.length > 0;
-  const showCarteira = carteiraArr.length > 0;
-  const showProjetos = projetosArr.length > 0;
-
-  // ── estilos reutilizáveis ───────────────────────────────────
   const SEC = 'padding:30px 34px;border-bottom:1px solid #d9e2ec;';
   const SEC_LABEL = 'margin:0 0 6px 0;font-size:10px;color:#1a73be;letter-spacing:3px;text-transform:uppercase;font-weight:bold;font-family:Arial,sans-serif;';
   const SEC_TITLE = 'margin:0 0 20px 0;font-size:20px;line-height:26px;color:#0d2b4c;font-weight:bold;font-family:Arial,sans-serif;';
-  const COL3 = 'vertical-align:top;border-top:3px solid ';
+  
+  const sectionHeader = (label, title) => `<p style="${SEC_LABEL}">${label}</p><h2 style="${SEC_TITLE}">${title}</h2>`;
 
-  const sectionHeader = (label, title) =>
-    `<p style="${SEC_LABEL}">${label}</p><h2 style="${SEC_TITLE}">${title}</h2>`;
+  const renderSimpleTable = (items, color = '#1a73be') => {
+    if (!items || items.length === 0) return '<tr><td style="font-size:12px;color:#777;padding:10px 0;">Nenhum item registrado.</td></tr>';
+    return items.map(item => `
+      <tr>
+        <td style="padding:10px 12px;border-left:4px solid ${color};background:#f8fafd;margin-bottom:8px;font-family:Arial,sans-serif;">
+          <div style="font-size:13px;font-weight:bold;color:#0d2b4c;">${escapeHtml(item.titulo)}</div>
+          ${item.descricao ? `<div style="font-size:12px;color:#444;margin-top:4px;">${escapeHtml(item.descricao)}</div>` : ''}
+          ${item.tempo ? `<div style="font-size:11px;color:#888;margin-top:4px;">Tempo: ${item.tempo}</div>` : ''}
+        </td>
+      </tr>
+      <tr><td style="height:6px;"></td></tr>
+    `).join('');
+  };
+
+  const renderThematicBlock = (items, color, label) => {
+    if (!items || items.length === 0) return '';
+    return `
+      <tr>
+        <td style="${SEC}">
+          ${sectionHeader('Destaque', label)}
+          <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            ${items.map(item => `
+              <tr>
+                <td style="padding:12px;background:#f0f5fa;border-left:4px solid ${color};">
+                  <div style="font-size:13px;font-weight:bold;color:#0d2b4c;">${escapeHtml(item.titulo)}</div>
+                  <div style="font-size:12px;color:#444;margin-top:4px;">${escapeHtml(item.descricao || item.motivo || '')}</div>
+                </td>
+              </tr>
+              <tr><td style="height:8px;"></td></tr>
+            `).join('')}
+          </table>
+        </td>
+      </tr>
+    `;
+  };
 
   return `<!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Relat&oacute;rio Semanal &mdash; FocusTrack</title>
-</head>
+<head><meta charset="UTF-8"><title>Relatório Weekly FocusTrack</title></head>
 <body style="margin:0;padding:0;background-color:#edf1f6;font-family:Arial,sans-serif;">
 <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#edf1f6">
-<tr><td align="center" style="padding:28px 16px;">
+<tr><td align="center" style="padding:20px;">
+  <table width="800" cellpadding="0" cellspacing="0" border="0" style="background:#fff;border:1px solid #d9e2ec;">
+    
+    <!-- HEADER -->
+    <tr>
+      <td style="padding:20px 34px;border-bottom:1px solid #d9e2ec;">
+        <table width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td><img src="${LOGO_FRANCO}" width="120"></td>
+            <td align="right"><img src="${LOGO_CONTAUDI}" width="120"></td>
+          </tr>
+        </table>
+      </td>
+    </tr>
 
-<table width="800" cellpadding="0" cellspacing="0" border="0" style="width:800px;max-width:800px;background-color:#ffffff;border-collapse:collapse;border:1px solid #d9e2ec;">
+    <!-- TITLE & COVER -->
+    <tr>
+      <td style="padding:40px 34px;background:#f8fafd;border-bottom:1px solid #d9e2ec;">
+        <p style="${SEC_LABEL}">${meta.semana.label}</p>
+        <h1 style="font-size:28px;color:#0d2b4c;margin:0 0 15px 0;">${escapeHtml(n.chamada_capa || 'Relatório de Gestão Operacional')}</h1>
+        <p style="font-size:14px;color:#3d5370;line-height:1.6;margin:0;">${escapeHtml(n.resumo_executivo || '')}</p>
+      </td>
+    </tr>
 
-  <!-- CABEÇALHO INSTITUCIONAL -->
-  <tr>
-    <td style="padding:22px 34px 18px 34px;background-color:#ffffff;border-bottom:1px solid #d9e2ec;">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td style="vertical-align:middle;">
-            <img src="${LOGO_FRANCO}" alt="Franco Sistemas" width="118" style="display:block;width:118px;max-width:118px;border:0;">
-          </td>
-          <td width="18" style="vertical-align:middle;border-left:1px solid #d9e2ec;padding-left:18px;">
-            <img src="${LOGO_CONTAUDI}" alt="Contaudi" width="122" style="display:block;width:122px;max-width:122px;border:0;">
-          </td>
-          <td align="right" style="vertical-align:middle;">
-            <div style="font-size:10px;color:#8a9ab5;font-family:Arial,sans-serif;text-align:right;">Uso interno &mdash; gest&atilde;o</div>
-            <div style="font-size:10px;color:#b0bcc8;font-family:Arial,sans-serif;text-align:right;margin-top:4px;">Gerado em ${geradoEm} &middot; Cuiab&aacute;/MT</div>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
+    <!-- METRICS -->
+    <tr>
+      <td style="${SEC}">
+        <table width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            ${renderMetricCell(meta.total_horas_semana || '0h', 'Total Horas', '#1a73be')}
+            ${renderMetricCell(g.concluidos_na_semana || 0, 'Concluídas', '#2fbf88')}
+            ${renderMetricCell(g.em_andamento || 0, 'Em Andamento', '#0d2b4c')}
+            ${renderMetricCell(g.backlog || 0, 'Backlog / Triagem', '#f2b84b')}
+          </tr>
+        </table>
+      </td>
+    </tr>
 
-  <!-- LINHA COLORIDA -->
-  <tr>
-    <td style="padding:0;">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td width="44%" style="height:5px;background-color:#0d2b4c;font-size:0;">&nbsp;</td>
-          <td width="22%" style="height:5px;background-color:#1a73be;font-size:0;">&nbsp;</td>
-          <td width="18%" style="height:5px;background-color:#2fbf88;font-size:0;">&nbsp;</td>
-          <td width="16%" style="height:5px;background-color:#f2b84b;font-size:0;">&nbsp;</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
+    <!-- LEITURA 30s -->
+    <tr>
+      <td style="${SEC}">
+        ${sectionHeader('Rápido', 'Leitura em 30 segundos')}
+        <table width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="32%" style="padding:15px;background:#f4fbf7;border-top:3px solid #2fbf88;vertical-align:top;">
+              <div style="font-size:11px;font-weight:bold;color:#2fbf88;margin-bottom:5px;">ENTREGA PRINCIPAL</div>
+              <div style="font-size:12px;color:#333;">${escapeHtml(n.leitura_30s?.entrega_principal || 'N/A')}</div>
+            </td>
+            <td width="2%"></td>
+            <td width="32%" style="padding:15px;background:#f7fbff;border-top:3px solid #1a73be;vertical-align:top;">
+              <div style="font-size:11px;font-weight:bold;color:#1a73be;margin-bottom:5px;">FOCO OPERACIONAL</div>
+              <div style="font-size:12px;color:#333;">${escapeHtml(n.leitura_30s?.foco_operacional || 'N/A')}</div>
+            </td>
+            <td width="2%"></td>
+            <td width="32%" style="padding:15px;background:#fffcf0;border-top:3px solid #f2b84b;vertical-align:top;">
+              <div style="font-size:11px;font-weight:bold;color:#c48b00;margin-bottom:5px;">PONTO DE GESTÃO</div>
+              <div style="font-size:12px;color:#333;">${escapeHtml(n.leitura_30s?.ponto_gestao || 'N/A')}</div>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
 
-  <!-- CAPA EXECUTIVA -->
-  <tr>
-    <td style="padding:34px 42px 30px 42px;background-color:#f8fafd;border-bottom:1px solid #d9e2ec;">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td style="vertical-align:top;" width="62%">
-            <p style="margin:0 0 10px 0;font-size:10px;color:#1a73be;letter-spacing:3px;text-transform:uppercase;font-weight:bold;font-family:Arial,sans-serif;">Relat&oacute;rio semanal</p>
-            <h1 style="margin:0 0 16px 0;font-size:30px;line-height:38px;color:#0d2b4c;font-weight:bold;letter-spacing:-0.6px;font-family:Arial,sans-serif;">Entregas, Carteira<br>e Automa&ccedil;&atilde;o</h1>
-            <p style="margin:0;font-size:13px;color:#3d5370;font-family:Arial,sans-serif;line-height:1.7;">${capaTexto}</p>
-          </td>
-          <td width="4%"></td>
-          <td style="vertical-align:top;" width="34%">
-            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #d9e2ec;background-color:#ffffff;">
-              <tr><td style="padding:20px;text-align:center;">
-                <div style="font-size:9px;color:#8a9ab5;font-family:Arial,sans-serif;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;">Per&iacute;odo</div>
-                <div style="font-size:18px;font-weight:bold;color:#0d2b4c;font-family:Arial,sans-serif;line-height:1.4;">${periodo}</div>
-                <div style="margin-top:10px;padding-top:10px;border-top:1px solid #e5eaf0;font-size:11px;color:#6b7a90;font-family:Arial,sans-serif;">${semanaLabel}</div>
-              </td></tr>
-            </table>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
+    <!-- DEPARTAMENTAL -->
+    <tr>
+      <td style="${SEC}">
+        ${sectionHeader('Departamentos', 'Análise por Frente de Trabalho')}
+        <p style="font-size:13px;color:#333;line-height:1.6;margin-bottom:15px;">${escapeHtml(n.analise_por_departamento || '')}</p>
+        <table width="100%" cellpadding="0" cellspacing="0" border="1" style="border-collapse:collapse;border:1px solid #d9e2ec;font-size:11px;">
+          <tr style="background:#0d2b4c;color:#fff;">
+            <th style="padding:8px;text-align:left;">Departamento</th>
+            <th style="padding:8px;">Total</th>
+            <th style="padding:8px;">Em Andamento</th>
+            <th style="padding:8px;">Backlog</th>
+            <th style="padding:8px;">Atrasados</th>
+          </tr>
+          ${(r.departamentos || []).map(d => `
+            <tr>
+              <td style="padding:8px;font-weight:bold;">${escapeHtml(d.nome)}</td>
+              <td style="padding:8px;text-align:center;">${d.total}</td>
+              <td style="padding:8px;text-align:center;">${d.em_andamento}</td>
+              <td style="padding:8px;text-align:center;">${d.backlog}</td>
+              <td style="padding:8px;text-align:center;color:${d.atrasados > 0 ? '#d93025' : '#777'};">${d.atrasados}</td>
+            </tr>
+          `).join('')}
+        </table>
+      </td>
+    </tr>
 
-  <!-- LEITURA 30s -->
-  <tr>
-    <td style="${SEC}">
-      ${sectionHeader('Gest&atilde;o', 'Leitura em 30 segundos')}
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td width="32%" style="${COL3}#1a73be;padding:14px 14px 14px 14px;background-color:#f7fbff;vertical-align:top;">
-            <div style="font-size:10px;font-weight:bold;color:#1a73be;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;font-family:Arial,sans-serif;">O que avan&ccedil;ou</div>
-            <div style="font-size:12px;color:#2d3e52;line-height:1.6;font-family:Arial,sans-serif;">${l30avancou}</div>
-          </td>
-          <td width="2%"></td>
-          <td width="32%" style="${COL3}#2fbf88;padding:14px;background-color:#f4fbf7;vertical-align:top;">
-            <div style="font-size:10px;font-weight:bold;color:#2fbf88;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;font-family:Arial,sans-serif;">O que foi entregue</div>
-            <div style="font-size:12px;color:#2d3e52;line-height:1.6;font-family:Arial,sans-serif;">${l30entregue}</div>
-          </td>
-          <td width="2%"></td>
-          <td width="32%" style="${COL3}#f2b84b;padding:14px;background-color:#fffcf0;vertical-align:top;">
-            <div style="font-size:10px;font-weight:bold;color:#c48b00;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;font-family:Arial,sans-serif;">O que exige gest&atilde;o</div>
-            <div style="font-size:12px;color:#2d3e52;line-height:1.6;font-family:Arial,sans-serif;">${l30gestao}</div>
-          </td>
-        </tr>
-      </table>
-      ${leituraGestao ? `<p style="margin:16px 0 0 0;font-size:12px;color:#4a5a70;font-family:Arial,sans-serif;line-height:1.7;padding:14px;background-color:#f7f9fc;border-left:3px solid #8aa4c0;">${leituraGestao}</p>` : ''}
-    </td>
-  </tr>
+    <!-- PRAZOS E DECISÕES -->
+    <tr>
+      <td style="${SEC}">
+        ${sectionHeader('Operacional', 'Prazos e Decisões de Gestão')}
+        <div style="padding:15px;background:#f7f9fc;border-left:4px solid #0d2b4c;font-size:13px;color:#333;line-height:1.7;">
+          ${escapeHtml(n.decisoes_e_prazos || 'Nenhuma decisão ou observação de prazo relevante registrada.')}
+        </div>
+      </td>
+    </tr>
 
-  <!-- MOVIMENTO DA CARTEIRA -->
-  <tr>
-    <td style="${SEC}">
-      ${sectionHeader('M&eacute;tricas', 'Movimento da carteira')}
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          ${renderMetricCell(totalApontamentos, 'Registros da semana', '#1a73be')}
-          ${renderMetricCell(totalConcluidas, 'Entregas concluídas', '#2fbf88')}
-          ${renderMetricCell(totalAndamento, 'Frentes em andamento', '#0d2b4c')}
-          ${renderMetricCell(totalBacklog, 'Backlog / triagem', '#f2b84b')}
-        </tr>
-      </table>
-      <p style="margin:16px 0 0 0;font-size:12px;color:#4a5a70;font-family:Arial,sans-serif;line-height:1.7;padding:14px;background-color:#f7f9fc;border-left:3px solid #8aa4c0;"><strong>Leitura de gest&atilde;o:</strong> A base formal de chamados representa a movimenta&ccedil;&atilde;o registrada no FocusTrack. Tamb&eacute;m devem ser considerados coment&aacute;rios, vit&oacute;rias sinalizadas, automa&ccedil;&otilde;es, suporte e frentes estruturais registradas no per&iacute;odo.</p>
-    </td>
-  </tr>
+    <!-- THEMATIC BLOCKS -->
+    ${renderThematicBlock(r.blocos_tematicos?.decisoes, '#0d2b4c', 'Decisões da Semana')}
+    ${renderThematicBlock(r.blocos_tematicos?.riscos, '#d93025', 'Riscos e Atenção')}
+    ${renderThematicBlock(r.blocos_tematicos?.dependencias, '#f2b84b', 'Dependências e Bloqueios')}
 
-  <!-- ACOMPANHAMENTO CONTÍNUO -->
-  <tr>
-    <td style="padding:0;border-bottom:1px solid #d9e2ec;">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f0f5fa;">
-        <tr>
-          <td style="padding:22px 34px;">
-            <p style="margin:0 0 4px 0;font-size:10px;color:#6b7a90;letter-spacing:2px;text-transform:uppercase;font-family:Arial,sans-serif;">Acompanhamento cont&iacute;nuo</p>
-            <p style="margin:0 0 10px 0;font-size:15px;font-weight:bold;color:#0d2b4c;font-family:Arial,sans-serif;">Lista oficial de demandas</p>
-            <p style="margin:0 0 16px 0;font-size:12px;color:#4a5a70;font-family:Arial,sans-serif;line-height:1.6;">Acesse o painel centralizado de demandas para acompanhar status, prazos e hist&oacute;rico de atividades em tempo real.</p>
-            <table cellpadding="0" cellspacing="0" border="0">
-              <tr>
-                <td style="background-color:#0d2b4c;padding:10px 22px;">
-                  <a href="${TEAMS_LINK}" target="_blank" style="font-size:13px;font-weight:bold;color:#ffffff;font-family:Arial,sans-serif;text-decoration:none;">Abrir lista de demandas</a>
-                </td>
-              </tr>
-            </table>
-            <p style="margin:10px 0 0 0;font-size:10px;color:#8a9ab5;font-family:Arial,sans-serif;">Acesso via Microsoft Teams</p>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
+    <!-- AUTOMATION SECTION -->
+    <tr>
+      <td style="${SEC}background:#f0f7ff;">
+        ${sectionHeader('Eficiência', 'Automações e Economia de Tempo')}
+        <table width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="60%" style="vertical-align:top;">
+              <p style="font-size:13px;color:#0d2b4c;margin:0 0 10px 0;">Frentes de automação identificadas ou em desenvolvimento:</p>
+              ${renderSimpleTable(r.blocos_tematicos?.automacoes, '#1a73be')}
+            </td>
+            <td width="40%" style="padding-left:20px;vertical-align:top;">
+              <div style="padding:15px;background:#fff;border:1px dashed #1a73be;text-align:center;">
+                <div style="font-size:10px;color:#1a73be;margin-bottom:5px;">ECONOMIA ESTIMADA</div>
+                <div style="font-size:24px;font-weight:bold;color:#0d2b4c;">${meta.total_economia_horas || 0}</div>
+                <div style="font-size:10px;color:#888;margin-top:5px;">Horas/Mês</div>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
 
-  <!-- CONTEXTO OPERACIONAL -->
-  <tr>
-    <td style="${SEC}">
-      ${sectionHeader('Contexto', contextoTitulo)}
-      <p style="margin:0;font-size:13px;color:#3d5370;font-family:Arial,sans-serif;line-height:1.8;">${contextoTexto}</p>
-    </td>
-  </tr>
+    <!-- LISTS -->
+    <tr>
+      <td style="${SEC}">
+        ${sectionHeader('Entregas', 'Principais Conclusões')}
+        <table width="100%" cellpadding="0" cellspacing="0">${renderSimpleTable(n.principais_entregas, '#2fbf88')}</table>
+      </td>
+    </tr>
 
-  ${showVitorias ? `<!-- VITÓRIAS -->
-  <tr>
-    <td style="${SEC}background-color:#f4fbf7;">
-      ${sectionHeader('Destaque da semana', 'Vit&oacute;rias da semana')}
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        ${vitoriasHtml}
-      </table>
-    </td>
-  </tr>` : ''}
+    <!-- PRÓXIMOS PASSOS -->
+    <tr>
+      <td style="${SEC}">
+        ${sectionHeader('Próximos', 'Foco Planejado')}
+        <table width="100%" cellpadding="0" cellspacing="0">${renderSimpleTable(n.proximos_passos, '#0d2b4c')}</table>
+      </td>
+    </tr>
 
-  <!-- ENTREGAS CONCLUÍDAS -->
-  <tr>
-    <td style="${SEC}">
-      ${sectionHeader('Resultados', 'Entregas conclu&iacute;das na semana')}
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        ${entregasHtml || `<tr><td style="font-size:13px;color:#6b7a90;font-family:Arial,sans-serif;padding:10px 0;">Nenhuma entrega conclu&iacute;da registrada neste per&iacute;odo.</td></tr>`}
-      </table>
-    </td>
-  </tr>
+    <!-- FOOTER -->
+    <tr>
+      <td style="padding:30px;background:#0d2b4c;color:#fff;text-align:center;">
+        <div style="font-size:12px;font-weight:bold;">Franco Sistemas & Contaudi</div>
+        <div style="font-size:10px;color:#7fb3d3;margin-top:5px;">Relatório Weekly Automatizado &middot; FocusTrack v2</div>
+      </td>
+    </tr>
 
-  <!-- DEMANDAS EM ANDAMENTO -->
-  <tr>
-    <td style="${SEC}">
-      ${sectionHeader('Carteira ativa', 'Demandas em andamento e projetos de melhoria')}
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        ${andamentoHtml || `<tr><td style="font-size:13px;color:#6b7a90;font-family:Arial,sans-serif;padding:10px 0;">Nenhuma demanda em andamento no per&iacute;odo.</td></tr>`}
-      </table>
-    </td>
-  </tr>
-
-  ${showAvancos ? `<!-- AVANÇOS ESTRUTURAIS -->
-  <tr>
-    <td style="${SEC}">
-      ${sectionHeader('Evolu&ccedil;&atilde;o', 'Avan&ccedil;os estruturais')}
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        ${avancosHtml}
-      </table>
-    </td>
-  </tr>` : ''}
-
-  ${showCarteira ? `<!-- CARTEIRA POR FRENTE -->
-  <tr>
-    <td style="${SEC}">
-      ${sectionHeader('Distribui&ccedil;&atilde;o', 'Carteira ativa por frente')}
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        ${carteiraHtml}
-      </table>
-    </td>
-  </tr>` : ''}
-
-  <!-- PONTOS DE ATENÇÃO -->
-  <tr>
-    <td style="${SEC}">
-      ${sectionHeader('Riscos e depend&ecirc;ncias', 'Pontos de aten&ccedil;&atilde;o e depend&ecirc;ncias')}
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        ${atencaoHtml}
-      </table>
-    </td>
-  </tr>
-
-  ${showProjetos ? `<!-- PROJETOS DE GESTÃO -->
-  <tr>
-    <td style="${SEC}">
-      ${sectionHeader('Gest&atilde;o estrat&eacute;gica', 'Projetos de interesse da gest&atilde;o')}
-      ${projetosHtml}
-    </td>
-  </tr>` : ''}
-
-  <!-- PRÓXIMOS PASSOS -->
-  <tr>
-    <td style="${SEC}">
-      ${sectionHeader('Planejamento', 'Foco planejado &mdash; pr&oacute;xima semana')}
-      ${proximosHtml}
-    </td>
-  </tr>
-
-  <!-- FECHAMENTO EXECUTIVO -->
-  <tr>
-    <td style="padding:0;border-bottom:1px solid #d9e2ec;">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#0d2b4c;">
-        <tr>
-          <td width="6" style="background-color:#1a73be;font-size:0;">&nbsp;</td>
-          <td style="padding:26px 30px;">
-            <p style="margin:0 0 8px 0;font-size:10px;color:#7fb3d3;letter-spacing:2px;text-transform:uppercase;font-family:Arial,sans-serif;">Fechamento executivo</p>
-            <p style="margin:0;font-size:13px;color:#c8ddf0;font-family:Arial,sans-serif;line-height:1.8;">${fechamentoTexto}</p>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-
-  <!-- RODAPÉ -->
-  <tr>
-    <td style="padding:0;">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td width="44%" style="height:3px;background-color:#0d2b4c;font-size:0;">&nbsp;</td>
-          <td width="22%" style="height:3px;background-color:#1a73be;font-size:0;">&nbsp;</td>
-          <td width="18%" style="height:3px;background-color:#2fbf88;font-size:0;">&nbsp;</td>
-          <td width="16%" style="height:3px;background-color:#f2b84b;font-size:0;">&nbsp;</td>
-        </tr>
-      </table>
-      <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f7f9fc">
-        <tr>
-          <td style="padding:20px 34px;text-align:center;border-top:1px solid #d9e2ec;">
-            <div style="font-size:12px;font-weight:bold;color:#0d2b4c;font-family:Arial,sans-serif;">Franco Sistemas &middot; Contaudi Assessoria Cont&aacute;bil</div>
-            <div style="font-size:11px;color:#6b7a90;font-family:Arial,sans-serif;margin-top:5px;">Relat&oacute;rio semanal de entregas, carteira, documenta&ccedil;&atilde;o e automa&ccedil;&atilde;o</div>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-
-</table>
-
+  </table>
 </td></tr>
 </table>
 </body>
