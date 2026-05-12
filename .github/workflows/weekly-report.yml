@@ -1,9 +1,9 @@
 name: Weekly FocusTrack Report
 
-on:
+"on":
+  # TESTE TEMPORÁRIO — dispara a cada 5 minutos para validar o gatilho schedule.
   schedule:
-    # TESTE imediato — terça-feira às 18:00 UTC (= 14:00 America/Cuiaba)
-    - cron: "0 18 * * 2"
+    - cron: "*/5 * * * *"
   workflow_dispatch:
     inputs:
       start:
